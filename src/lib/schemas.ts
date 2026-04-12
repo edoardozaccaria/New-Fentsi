@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -10,9 +10,9 @@ import { z } from 'zod'
  * Prevents injection of control characters in user-supplied text.
  */
 const sanitizeString = (s: string) =>
-  s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+  s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
 
-const sanitizedString = () => z.string().transform(sanitizeString)
+const sanitizedString = () => z.string().transform(sanitizeString);
 
 // ---------------------------------------------------------------------------
 // OnboardingDataSchema
@@ -58,7 +58,7 @@ export const OnboardingDataSchema = z
         'minimalist',
         'vintage',
         'tropical',
-      ]),
+      ])
     ),
 
     priorities: z.array(
@@ -73,7 +73,7 @@ export const OnboardingDataSchema = z
         'cake',
         'attire',
         'other',
-      ]),
+      ])
     ),
 
     services: z.array(
@@ -89,7 +89,7 @@ export const OnboardingDataSchema = z
         'wedding_cake',
         'mc',
         'planner',
-      ]),
+      ])
     ),
 
     region: z.string().nullable(),
@@ -103,17 +103,18 @@ export const OnboardingDataSchema = z
   .refine(
     (data) => {
       // lat and lng must be provided together — neither alone is valid.
-      const hasLat = data.locationLat !== undefined
-      const hasLng = data.locationLng !== undefined
-      return hasLat === hasLng
+      const hasLat = data.locationLat !== undefined;
+      const hasLng = data.locationLng !== undefined;
+      return hasLat === hasLng;
     },
     {
-      message: 'locationLat and locationLng must both be present or both absent',
+      message:
+        'locationLat and locationLng must both be present or both absent',
       path: ['locationLat'],
-    },
-  )
+    }
+  );
 
-export type OnboardingData = z.infer<typeof OnboardingDataSchema>
+export type OnboardingData = z.infer<typeof OnboardingDataSchema>;
 
 // ---------------------------------------------------------------------------
 // VendorSearchSchema
@@ -123,13 +124,21 @@ export const VendorSearchSchema = z.object({
   lat: z.number(),
   lng: z.number(),
   categories: z.array(
-    z.enum(['venue', 'catering', 'decor', 'entertainment', 'av', 'photo_video', 'misc']),
+    z.enum([
+      'venue',
+      'catering',
+      'decor',
+      'entertainment',
+      'av',
+      'photo_video',
+      'misc',
+    ])
   ),
   /** Search radius in metres. Default 5000, max 30000. */
   radius: z.number().int().min(1).max(30_000).default(5_000),
-})
+});
 
-export type VendorSearch = z.infer<typeof VendorSearchSchema>
+export type VendorSearch = z.infer<typeof VendorSearchSchema>;
 
 // ---------------------------------------------------------------------------
 // CheckoutSchema
@@ -138,9 +147,9 @@ export type VendorSearch = z.infer<typeof VendorSearchSchema>
 export const CheckoutSchema = z.object({
   planType: z.enum(['single', 'pro', 'agency']),
   email: z.string().email(),
-})
+});
 
-export type Checkout = z.infer<typeof CheckoutSchema>
+export type Checkout = z.infer<typeof CheckoutSchema>;
 
 // ---------------------------------------------------------------------------
 // BookingCheckoutSchema
@@ -150,6 +159,6 @@ export const BookingCheckoutSchema = z.object({
   vendorId: z.string().uuid(),
   planId: z.string().uuid(),
   depositAmount: z.number().min(100),
-})
+});
 
-export type BookingCheckout = z.infer<typeof BookingCheckoutSchema>
+export type BookingCheckout = z.infer<typeof BookingCheckoutSchema>;

@@ -6,6 +6,6 @@ const env = {
   appEnv: process.env.NEXT_PUBLIC_APP_ENV ?? 'development',
   isDev: process.env.NEXT_PUBLIC_APP_ENV === 'development',
   isProd: process.env.NEXT_PUBLIC_APP_ENV === 'production',
-} as const
+} as const;
 
-export default env
+export default env;
