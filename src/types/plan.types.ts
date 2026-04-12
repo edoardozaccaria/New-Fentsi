@@ -1,5 +1,5 @@
 // Plan domain types — Fentsi event planning platform.
-// All monetary values are in USD.
+// All monetary values are in EUR unless stated otherwise.
 
 // ---------------------------------------------------------------------------
 // Enums / union literals
@@ -52,7 +52,7 @@ export type BudgetTier = 'budget' | 'mid-range' | 'premium' | 'luxury';
 // Budget breakdown (AI plan output)
 // ---------------------------------------------------------------------------
 
-/** Absolute USD amounts per spend category, as returned by the AI. */
+/** Absolute EUR amounts per spend category, as returned by the AI. */
 export interface BudgetBreakdown {
   catering: number;
   photography: number;
@@ -62,6 +62,50 @@ export interface BudgetBreakdown {
   music: number;
   transportation: number;
   other: number;
+  /** 10% contingency reserve — always included in plan output. */
+  contingency_eur: number;
+}
+
+// ---------------------------------------------------------------------------
+// Alert
+// ---------------------------------------------------------------------------
+
+export type AlertType = 'permit' | 'seasonal' | 'cultural' | 'logistic';
+export type AlertSeverity = 'high' | 'medium' | 'low';
+
+export interface AlertItem {
+  type: AlertType;
+  message: string;
+  severity: AlertSeverity;
+}
+
+// ---------------------------------------------------------------------------
+// Logistics
+// ---------------------------------------------------------------------------
+
+export interface LogisticsData {
+  transportation: string[];
+  accommodation: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Catering meta
+// ---------------------------------------------------------------------------
+
+export interface CateringMeta {
+  approach: string;
+  menuConcept: string;
+}
+
+// ---------------------------------------------------------------------------
+// Plan overview (emitted by AI as first NDJSON line)
+// ---------------------------------------------------------------------------
+
+export interface PlanOverview {
+  budgetBreakdown: BudgetBreakdown;
+  alerts: AlertItem[];
+  logistics: LogisticsData;
+  catering: CateringMeta;
 }
 
 // ---------------------------------------------------------------------------
@@ -93,6 +137,7 @@ export interface EventPlan {
   id: string;
   eventType: EventType;
   eventDate: string;
+  duration?: string;
   guestCount: number;
   city: string;
   venuePreference: VenuePreference;
@@ -100,7 +145,13 @@ export interface EventPlan {
   stylePreferences: EventStyle[];
   requiredServices: RequiredService[];
   specialRequests?: string;
+  specialRequirements?: string[];
+  outputLanguage?: string;
   suppliers: VendorSuggestion[];
+  budgetBreakdown?: BudgetBreakdown;
+  alerts?: AlertItem[];
+  logistics?: LogisticsData;
+  cateringMeta?: CateringMeta;
   createdAt: string;
 }
 

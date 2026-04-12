@@ -1,6 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { buildPrompt } from '@/lib/ai';
+import type { PlanOverview } from '@/types/plan.types';
 
 export const runtime = 'nodejs';
 
@@ -11,49 +13,17 @@ export const runtime = 'nodejs';
 const RequestSchema = z.object({
   eventType: z.string(),
   eventDate: z.string().nullable(),
+  duration: z.string().default('full_day'),
   guestCount: z.number().int().min(10).max(500),
   city: z.string().min(1),
   venuePreference: z.string().nullable(),
-  budgetUsd: z.number().min(5_000).max(500_000),
+  budgetUsd: z.number().min(500).max(500_000),
   stylePreferences: z.array(z.string()),
   requiredServices: z.array(z.string()).min(1),
+  specialRequirements: z.array(z.string()).default([]),
   specialRequests: z.string().optional(),
+  outputLanguage: z.string().default('it'),
 });
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function buildPrompt(data: z.infer<typeof RequestSchema>): string {
-  return `You are an expert event planning concierge. Generate 3 realistic (AI-fictional) supplier suggestions for EACH service category listed below.
-
-EVENT DETAILS:
-- Type: ${data.eventType}
-- Date: ${data.eventDate ?? 'TBD'}
-- Guests: ${data.guestCount}
-- City: ${data.city}
-- Venue preference: ${data.venuePreference ?? 'no preference'}
-- Budget: $${data.budgetUsd.toLocaleString('en-US')} USD total
-- Style: ${data.stylePreferences.join(', ') || 'flexible'}
-- Special requests: ${data.specialRequests || 'none'}
-
-SERVICE CATEGORIES TO FILL:
-${data.requiredServices.map((s) => `- ${s}`).join('\n')}
-
-OUTPUT FORMAT:
-Emit one JSON object per line (NDJSON). Each line must be:
-{"type":"supplier","data":{"name":"...","category":"...","description":"...","estimatedPriceUsd":XXXX,"city":"...","isVerified":false}}
-
-Rules:
-- Output ONLY raw JSON lines. No markdown, no prose, no code fences.
-- Generate exactly 3 suppliers per service category listed above.
-- "category" must exactly match the service name from the list above.
-- "estimatedPriceUsd" must be a realistic number proportional to the budget.
-- "city" must match the event city: ${data.city}
-- All names and descriptions must be fictional but realistic.
-- After all suppliers, emit: {"type":"done","status":"ok"}
-`;
-}
 
 // ---------------------------------------------------------------------------
 // Route handler
@@ -83,12 +53,10 @@ export async function POST(request: Request) {
     ? authHeader.slice(7)
     : null;
 
-  // We use the service-role key on server to verify session via cookie header
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-  // Use the anon key with the user's access token if provided
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
     global: accessToken
       ? { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -110,6 +78,7 @@ export async function POST(request: Request) {
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 
   const encoder = new TextEncoder();
+
   const collected: Array<{
     name: string;
     category: string;
@@ -118,7 +87,23 @@ export async function POST(request: Request) {
     city: string;
     isVerified: boolean;
   }> = [];
+  let planOverview: PlanOverview | null = null;
   let eventId: string | null = null;
+
+  const prompt = buildPrompt({
+    eventType: data.eventType,
+    date: data.eventDate,
+    duration: data.duration,
+    guestCount: data.guestCount,
+    city: data.city,
+    venuePreference: data.venuePreference,
+    budgetEur: data.budgetUsd,
+    stylePreferences: data.stylePreferences,
+    requiredServices: data.requiredServices,
+    specialRequirements: data.specialRequirements,
+    specialRequests: data.specialRequests,
+    outputLanguage: data.outputLanguage,
+  });
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -126,7 +111,7 @@ export async function POST(request: Request) {
         const anthropicStream = anthropic.messages.stream({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 4096,
-          messages: [{ role: 'user', content: buildPrompt(data) }],
+          messages: [{ role: 'user', content: prompt }],
         });
 
         let lineBuffer = '';
@@ -138,7 +123,6 @@ export async function POST(request: Request) {
           ) {
             lineBuffer += chunk.delta.text;
 
-            // Parse complete lines as they arrive
             const lines = lineBuffer.split('\n');
             lineBuffer = lines.pop() ?? '';
 
@@ -147,12 +131,17 @@ export async function POST(request: Request) {
               if (!trimmed) continue;
 
               try {
-                const parsed = JSON.parse(trimmed);
-                if (parsed.type === 'supplier' && parsed.data) {
-                  collected.push(parsed.data);
+                const parsedLine = JSON.parse(trimmed);
+
+                if (parsedLine.type === 'plan_overview' && parsedLine.data) {
+                  planOverview = parsedLine.data as PlanOverview;
+                  // Forward to client immediately so UI can render budget/alerts
+                  controller.enqueue(encoder.encode(trimmed + '\n'));
+                } else if (parsedLine.type === 'supplier' && parsedLine.data) {
+                  collected.push(parsedLine.data);
                   controller.enqueue(encoder.encode(trimmed + '\n'));
                 }
-                // Don't forward "done" yet — we emit it after saving
+                // Don't forward "done" yet — emit after saving
               } catch {
                 // Partial JSON — skip
               }
@@ -163,9 +152,9 @@ export async function POST(request: Request) {
         // Flush remaining buffer
         if (lineBuffer.trim()) {
           try {
-            const parsed = JSON.parse(lineBuffer.trim());
-            if (parsed.type === 'supplier' && parsed.data) {
-              collected.push(parsed.data);
+            const parsedLine = JSON.parse(lineBuffer.trim());
+            if (parsedLine.type === 'supplier' && parsedLine.data) {
+              collected.push(parsedLine.data);
               controller.enqueue(encoder.encode(lineBuffer.trim() + '\n'));
             }
           } catch {
@@ -189,6 +178,11 @@ export async function POST(request: Request) {
             style_preferences: data.stylePreferences,
             required_services: data.requiredServices,
             special_requests: data.specialRequests ?? null,
+            // wizard v2 fields (require migration 002)
+            output_language: data.outputLanguage,
+            special_requirements: data.specialRequirements,
+            duration: data.duration,
+            plan_data: planOverview ?? null,
           })
           .select('id')
           .single();
@@ -222,7 +216,6 @@ export async function POST(request: Request) {
           );
         }
 
-        // Emit done
         controller.enqueue(
           encoder.encode(JSON.stringify({ type: 'done', eventId }) + '\n')
         );
