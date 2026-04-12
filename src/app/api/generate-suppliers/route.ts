@@ -2,6 +2,11 @@ import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { buildPrompt } from '@/lib/ai';
+import {
+  checkRateLimit,
+  getRateLimitKey,
+  rateLimitResponse,
+} from '@/lib/rate-limit';
 import type { PlanOverview } from '@/types/plan.types';
 
 export const runtime = 'nodejs';
@@ -30,6 +35,11 @@ const RequestSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export async function POST(request: Request) {
+  // --- Rate limit: 5 AI calls per minute per IP ---
+  const rlKey = `generate-suppliers:${getRateLimitKey(request)}`;
+  const rl = checkRateLimit(rlKey, { limit: 5, windowMs: 60_000 });
+  if (!rl.allowed) return rateLimitResponse(rl.retryAfterMs);
+
   // --- Parse input ---
   let body: unknown;
   try {

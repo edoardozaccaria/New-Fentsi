@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRouter } from 'next/navigation';
 import { useEventWizardStore } from '@/store/useEventWizardStore';
@@ -48,6 +48,39 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
       >
         {value}
       </span>
+    </div>
+  );
+}
+
+const LOADING_MESSAGES = [
+  'Stiamo creando il tuo piano evento…',
+  'Analizzando fornitori nella tua area…',
+  'Ottimizzando il budget per le tue preferenze…',
+  'Preparando i dettagli del tuo evento…',
+];
+
+function FullscreenLoader({ message }: { message: string }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-8"
+      style={{ background: 'rgba(11,10,9,0.97)' }}
+    >
+      {/* Spinner */}
+      <div
+        className="rounded-full border-2 border-t-transparent animate-spin"
+        style={{
+          width: 48,
+          height: 48,
+          borderColor: '#2a2520',
+          borderTopColor: '#c9975b',
+        }}
+      />
+      <p
+        className="text-sm text-center max-w-xs leading-relaxed transition-all duration-500"
+        style={{ color: '#9a8f86' }}
+      >
+        {message}
+      </p>
     </div>
   );
 }
@@ -113,8 +146,28 @@ export function Step10_Review() {
   const [streamDone, setStreamDone] = useState(false);
   const [generateError, setGenerateError] = useState('');
   const [skeletonCount, setSkeletonCount] = useState(0);
+  const [loadingMessageIdx, setLoadingMessageIdx] = useState(0);
 
   const abortRef = useRef<AbortController | null>(null);
+  const messageTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startMessageRotation = useCallback(() => {
+    setLoadingMessageIdx(0);
+    messageTimerRef.current = setInterval(() => {
+      setLoadingMessageIdx((i) => (i + 1) % LOADING_MESSAGES.length);
+    }, 5000);
+  }, []);
+
+  const stopMessageRotation = useCallback(() => {
+    if (messageTimerRef.current) {
+      clearInterval(messageTimerRef.current);
+      messageTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => stopMessageRotation();
+  }, [stopMessageRotation]);
 
   useEffect(() => {
     const resumed = sessionStorage.getItem('fentsi-wizard-resume-generate');
@@ -143,6 +196,7 @@ export function Step10_Review() {
     setSuppliers([]);
     setStreamDone(false);
     setGenerateError('');
+    startMessageRotation();
 
     const expectedCount = store.requiredServices.length * 3;
     setSkeletonCount(expectedCount);
@@ -234,6 +288,7 @@ export function Step10_Review() {
         setGenerateError('Connessione persa. Riprova.');
       }
     } finally {
+      stopMessageRotation();
       setGenerating(false);
     }
   }
@@ -295,249 +350,267 @@ export function Step10_Review() {
   };
 
   return (
-    <WizardShell
-      currentStep={currentStep}
-      onBack={prevStep}
-      hideNav={generating}
-    >
-      <div className="space-y-8">
-        <div className="space-y-2">
-          <p
-            className="text-xs tracking-[0.2em] uppercase"
-            style={{ color: '#6b6258' }}
-          >
-            Domanda 10 di 10
-          </p>
-          <h1
-            className="font-serif leading-tight"
-            style={{
-              fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-              color: '#f0ebe3',
-            }}
-          >
-            Riepilogo del
-            <br />
-            tuo evento
-          </h1>
-        </div>
-
-        <div
-          className="rounded-xl border overflow-hidden"
-          style={{ borderColor: '#2a2520' }}
-        >
-          <div
-            className="px-4 py-3 border-b"
-            style={{ background: '#0f0e0c', borderColor: '#2a2520' }}
-          >
+    <>
+      {generating && suppliers.length === 0 && (
+        <FullscreenLoader message={LOADING_MESSAGES[loadingMessageIdx]!} />
+      )}
+      <WizardShell
+        currentStep={currentStep}
+        onBack={prevStep}
+        hideNav={generating}
+      >
+        <div className="space-y-8">
+          <div className="space-y-2">
             <p
-              className="text-xs tracking-widest uppercase"
+              className="text-xs tracking-[0.2em] uppercase"
               style={{ color: '#6b6258' }}
             >
-              Le tue scelte
+              Domanda 10 di 10
             </p>
+            <h1
+              className="font-serif leading-tight"
+              style={{
+                fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
+                color: '#f0ebe3',
+              }}
+            >
+              Riepilogo del
+              <br />
+              tuo evento
+            </h1>
           </div>
+
           <div
-            className="px-4 divide-y"
-            style={{ background: '#111009', borderColor: '#1e1c1a' }}
+            className="rounded-xl border overflow-hidden"
+            style={{ borderColor: '#2a2520' }}
           >
-            <SummaryRow
-              label="Tipo evento"
-              value={eventTypeLabel[eventType ?? ''] ?? eventType ?? '—'}
-            />
-            <SummaryRow
-              label="Data"
-              value={
-                eventDate
-                  ? new Date(eventDate + 'T00:00:00').toLocaleDateString(
-                      'it-IT',
-                      {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                      }
-                    )
-                  : '—'
-              }
-            />
-            <SummaryRow
-              label="Durata"
-              value={DURATION_LABELS[duration] ?? duration}
-            />
-            <SummaryRow label="Ospiti" value={`${guestCount} ospiti`} />
-            <SummaryRow label="Città" value={city || '—'} />
-            <SummaryRow
-              label="Venue"
-              value={
-                venueLabel[venuePreference ?? ''] ?? venuePreference ?? '—'
-              }
-            />
-            <SummaryRow label="Budget" value={formatEur(budgetUsd)} />
-            <SummaryRow
-              label="Stile"
-              value={stylePreferences.join(', ') || '—'}
-            />
-            <SummaryRow
-              label="Servizi"
-              value={
-                requiredServices.map((s) => s.replace('_', ' ')).join(', ') ||
-                '—'
-              }
-            />
-            {specialRequirements.length > 0 && (
+            <div
+              className="px-4 py-3 border-b"
+              style={{ background: '#0f0e0c', borderColor: '#2a2520' }}
+            >
+              <p
+                className="text-xs tracking-widest uppercase"
+                style={{ color: '#6b6258' }}
+              >
+                Le tue scelte
+              </p>
+            </div>
+            <div
+              className="px-4 divide-y"
+              style={{ background: '#111009', borderColor: '#1e1c1a' }}
+            >
               <SummaryRow
-                label="Esigenze"
-                value={specialRequirements
-                  .map((r) => r.replace('_', ' '))
-                  .join(', ')}
+                label="Tipo evento"
+                value={eventTypeLabel[eventType ?? ''] ?? eventType ?? '—'}
               />
-            )}
-            {specialRequests && (
-              <SummaryRow label="Note" value={specialRequests} />
-            )}
-            <SummaryRow
-              label="Lingua piano"
-              value={LANGUAGE_LABELS[outputLanguage] ?? outputLanguage}
-            />
-          </div>
-        </div>
-
-        {generateError && (
-          <div
-            className="rounded-xl border px-5 py-4 text-sm"
-            style={{
-              background: '#1a0f10',
-              borderColor: '#b5505a',
-              color: '#e07070',
-            }}
-          >
-            {generateError}
-          </div>
-        )}
-
-        {(generating || streamDone) && (
-          <div className="space-y-4">
-            <p
-              className="text-xs tracking-widest uppercase"
-              style={{ color: '#6b6258' }}
-            >
-              {streamDone ? 'Fornitori trovati' : 'Ricerca fornitori…'}
-            </p>
-            <div className="space-y-3">
-              {suppliers.map((s, i) => (
-                <SupplierCard key={i} supplier={s} />
-              ))}
-              {Array.from({ length: skeletonCount }).map((_, i) => (
-                <SupplierSkeleton key={`sk-${i}`} />
-              ))}
+              <SummaryRow
+                label="Data"
+                value={
+                  eventDate
+                    ? new Date(eventDate + 'T00:00:00').toLocaleDateString(
+                        'it-IT',
+                        {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        }
+                      )
+                    : '—'
+                }
+              />
+              <SummaryRow
+                label="Durata"
+                value={DURATION_LABELS[duration] ?? duration}
+              />
+              <SummaryRow label="Ospiti" value={`${guestCount} ospiti`} />
+              <SummaryRow label="Città" value={city || '—'} />
+              <SummaryRow
+                label="Venue"
+                value={
+                  venueLabel[venuePreference ?? ''] ?? venuePreference ?? '—'
+                }
+              />
+              <SummaryRow label="Budget" value={formatEur(budgetUsd)} />
+              <SummaryRow
+                label="Stile"
+                value={stylePreferences.join(', ') || '—'}
+              />
+              <SummaryRow
+                label="Servizi"
+                value={
+                  requiredServices.map((s) => s.replace('_', ' ')).join(', ') ||
+                  '—'
+                }
+              />
+              {specialRequirements.length > 0 && (
+                <SummaryRow
+                  label="Esigenze"
+                  value={specialRequirements
+                    .map((r) => r.replace('_', ' '))
+                    .join(', ')}
+                />
+              )}
+              {specialRequests && (
+                <SummaryRow label="Note" value={specialRequests} />
+              )}
+              <SummaryRow
+                label="Lingua piano"
+                value={LANGUAGE_LABELS[outputLanguage] ?? outputLanguage}
+              />
             </div>
           </div>
-        )}
 
-        {!generating && !streamDone && (
-          <button
-            onClick={handleGenerateCTA}
-            className="w-full py-4 rounded-xl font-medium text-sm tracking-wide transition-opacity"
-            style={{ background: '#c9975b', color: '#0b0a09' }}
-          >
-            Genera il mio piano →
-          </button>
-        )}
-      </div>
-
-      <Dialog.Root open={authOpen} onOpenChange={setAuthOpen}>
-        <Dialog.Portal>
-          <Dialog.Overlay
-            className="fixed inset-0 z-40"
-            style={{
-              background: 'rgba(11,10,9,0.85)',
-              backdropFilter: 'blur(4px)',
-            }}
-          />
-          <Dialog.Content
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md rounded-2xl border p-8 space-y-6 outline-none"
-            style={{ background: '#131110', borderColor: '#2a2520' }}
-          >
-            <Dialog.Title
-              className="font-serif text-xl"
-              style={{ color: '#f0ebe3' }}
-            >
-              Accedi per continuare
-            </Dialog.Title>
-            <Dialog.Description
-              className="text-sm"
-              style={{ color: '#6b6258' }}
-            >
-              Ti invieremo un link magico via email. Dopo l'accesso, il piano
-              verrà generato automaticamente.
-            </Dialog.Description>
-
-            {authSent ? (
+          {generateError && (
+            <div className="space-y-3">
               <div
                 className="rounded-xl border px-5 py-4 text-sm"
                 style={{
-                  background: '#0f1a0f',
-                  borderColor: '#3a7a3a',
-                  color: '#7acc7a',
+                  background: '#1a0f10',
+                  borderColor: '#b5505a',
+                  color: '#e07070',
                 }}
               >
-                Controlla la tua casella — link inviato a{' '}
-                <strong>{authEmail}</strong>.
+                {generateError}
               </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <label
-                    className="text-xs tracking-widest uppercase"
-                    style={{ color: '#6b6258' }}
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={authEmail}
-                    onChange={(e) => setAuthEmail(e.target.value)}
-                    onKeyDown={(e) =>
-                      e.key === 'Enter' && handleSendMagicLink()
-                    }
-                    placeholder="tu@esempio.it"
-                    className="w-full rounded-xl border px-4 py-3 text-sm outline-none"
-                    style={{
-                      background: '#0b0a09',
-                      borderColor: '#2a2520',
-                      color: '#f0ebe3',
-                    }}
-                    autoFocus
-                  />
-                </div>
-                {authError && (
-                  <p className="text-xs" style={{ color: '#b5505a' }}>
-                    {authError}
-                  </p>
-                )}
-                <button
-                  onClick={handleSendMagicLink}
-                  disabled={authLoading}
-                  className="w-full py-3 rounded-xl font-medium text-sm transition-opacity"
+              <button
+                onClick={handleGenerateCTA}
+                className="w-full py-3 rounded-xl font-medium text-sm tracking-wide border transition-colors"
+                style={{
+                  background: 'transparent',
+                  borderColor: '#b5505a',
+                  color: '#e07070',
+                }}
+              >
+                Riprova
+              </button>
+            </div>
+          )}
+
+          {(generating || streamDone) && (
+            <div className="space-y-4">
+              <p
+                className="text-xs tracking-widest uppercase"
+                style={{ color: '#6b6258' }}
+              >
+                {streamDone ? 'Fornitori trovati' : 'Ricerca fornitori…'}
+              </p>
+              <div className="space-y-3">
+                {suppliers.map((s, i) => (
+                  <SupplierCard key={i} supplier={s} />
+                ))}
+                {Array.from({ length: skeletonCount }).map((_, i) => (
+                  <SupplierSkeleton key={`sk-${i}`} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!generating && !streamDone && (
+            <button
+              onClick={handleGenerateCTA}
+              className="w-full py-4 rounded-xl font-medium text-sm tracking-wide transition-opacity"
+              style={{ background: '#c9975b', color: '#0b0a09' }}
+            >
+              Genera il mio piano →
+            </button>
+          )}
+        </div>
+
+        <Dialog.Root open={authOpen} onOpenChange={setAuthOpen}>
+          <Dialog.Portal>
+            <Dialog.Overlay
+              className="fixed inset-0 z-40"
+              style={{
+                background: 'rgba(11,10,9,0.85)',
+                backdropFilter: 'blur(4px)',
+              }}
+            />
+            <Dialog.Content
+              className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md rounded-2xl border p-8 space-y-6 outline-none"
+              style={{ background: '#131110', borderColor: '#2a2520' }}
+            >
+              <Dialog.Title
+                className="font-serif text-xl"
+                style={{ color: '#f0ebe3' }}
+              >
+                Accedi per continuare
+              </Dialog.Title>
+              <Dialog.Description
+                className="text-sm"
+                style={{ color: '#6b6258' }}
+              >
+                Ti invieremo un link magico via email. Dopo l'accesso, il piano
+                verrà generato automaticamente.
+              </Dialog.Description>
+
+              {authSent ? (
+                <div
+                  className="rounded-xl border px-5 py-4 text-sm"
                   style={{
-                    background: '#c9975b',
-                    color: '#0b0a09',
-                    opacity: authLoading ? 0.6 : 1,
+                    background: '#0f1a0f',
+                    borderColor: '#3a7a3a',
+                    color: '#7acc7a',
                   }}
                 >
-                  {authLoading ? 'Invio in corso…' : 'Invia link magico'}
-                </button>
-              </div>
-            )}
+                  Controlla la tua casella — link inviato a{' '}
+                  <strong>{authEmail}</strong>.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label
+                      className="text-xs tracking-widest uppercase"
+                      style={{ color: '#6b6258' }}
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      onKeyDown={(e) =>
+                        e.key === 'Enter' && handleSendMagicLink()
+                      }
+                      placeholder="tu@esempio.it"
+                      className="w-full rounded-xl border px-4 py-3 text-sm outline-none"
+                      style={{
+                        background: '#0b0a09',
+                        borderColor: '#2a2520',
+                        color: '#f0ebe3',
+                      }}
+                      autoFocus
+                    />
+                  </div>
+                  {authError && (
+                    <p className="text-xs" style={{ color: '#b5505a' }}>
+                      {authError}
+                    </p>
+                  )}
+                  <button
+                    onClick={handleSendMagicLink}
+                    disabled={authLoading}
+                    className="w-full py-3 rounded-xl font-medium text-sm transition-opacity"
+                    style={{
+                      background: '#c9975b',
+                      color: '#0b0a09',
+                      opacity: authLoading ? 0.6 : 1,
+                    }}
+                  >
+                    {authLoading ? 'Invio in corso…' : 'Invia link magico'}
+                  </button>
+                </div>
+              )}
 
-            <Dialog.Close
-              className="absolute top-5 right-5 text-xs"
-              style={{ color: '#4a4540' }}
-            >
-              ✕
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </WizardShell>
+              <Dialog.Close
+                className="absolute top-5 right-5 text-xs"
+                style={{ color: '#4a4540' }}
+              >
+                ✕
+              </Dialog.Close>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+      </WizardShell>
+    </>
   );
 }
