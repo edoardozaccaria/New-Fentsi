@@ -3,16 +3,16 @@
 import React from 'react';
 
 const STEPS = [
-  'Event Type',
-  'Date',
-  'Guests',
+  'Tipo evento',
   'Location',
-  'Venue',
+  'Data & Durata',
+  'Ospiti',
   'Budget',
-  'Style',
-  'Services',
-  'Notes',
-  'Review',
+  'Stile',
+  'Servizi',
+  'Esigenze',
+  'Lingua',
+  'Riepilogo',
 ];
 
 interface WizardShellProps {

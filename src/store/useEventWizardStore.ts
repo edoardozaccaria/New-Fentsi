@@ -12,6 +12,9 @@ import type {
   RequiredService,
 } from '@/types/plan.types';
 
+export type EventDuration = 'half_day' | 'full_day' | 'weekend';
+export type OutputLanguage = 'it' | 'en' | 'fr' | 'es' | 'de';
+
 // ---------------------------------------------------------------------------
 // Wizard state shape
 // ---------------------------------------------------------------------------
@@ -33,8 +36,14 @@ export interface EventWizardState {
   stylePreferences: EventStyle[];
   // Step 8
   requiredServices: RequiredService[];
-  // Step 9
+  // Step 3 (duration)
+  duration: EventDuration;
+  // Step 8 (structured requirements)
+  specialRequirements: string[];
+  // Step 9 (legacy free-text notes, kept for review display)
   specialRequests: string;
+  // Step 9 (output language)
+  outputLanguage: OutputLanguage;
   // Progress
   currentStep: number;
   lastStepCompleted: number;
@@ -51,7 +60,11 @@ export interface EventWizardActions {
   toggleStyle: (v: EventStyle) => void;
   setRequiredServices: (v: RequiredService[]) => void;
   toggleService: (v: RequiredService) => void;
+  setDuration: (v: EventDuration) => void;
+  setSpecialRequirements: (v: string[]) => void;
+  toggleSpecialRequirement: (v: string) => void;
   setSpecialRequests: (v: string) => void;
+  setOutputLanguage: (v: OutputLanguage) => void;
   goToStep: (step: number) => void;
   nextStep: () => void;
   prevStep: () => void;
@@ -74,7 +87,10 @@ const DEFAULT_STATE: EventWizardState = {
   budgetUsd: 20000,
   stylePreferences: [],
   requiredServices: [],
+  duration: 'full_day',
+  specialRequirements: [],
   specialRequests: '',
+  outputLanguage: 'it',
   currentStep: 1,
   lastStepCompleted: 0,
 };
@@ -126,7 +142,21 @@ export const useEventWizardStore = create<EventWizardStore>()(
         });
       },
 
+      setDuration: (duration) => set({ duration }),
+
+      setSpecialRequirements: (specialRequirements) =>
+        set({ specialRequirements }),
+      toggleSpecialRequirement: (req) => {
+        const { specialRequirements } = get();
+        set({
+          specialRequirements: specialRequirements.includes(req)
+            ? specialRequirements.filter((r) => r !== req)
+            : [...specialRequirements, req],
+        });
+      },
+
       setSpecialRequests: (specialRequests) => set({ specialRequests }),
+      setOutputLanguage: (outputLanguage) => set({ outputLanguage }),
 
       goToStep: (step) => set({ currentStep: step }),
       nextStep: () =>

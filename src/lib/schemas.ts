@@ -92,6 +92,23 @@ export const OnboardingDataSchema = z
       ])
     ),
 
+    duration: z.enum(['half_day', 'full_day', 'weekend']).default('full_day'),
+
+    specialRequirements: z.array(
+      z.enum([
+        'vegetarian',
+        'vegan',
+        'gluten_free',
+        'halal',
+        'kosher',
+        'wheelchair_access',
+        'outdoor_permit',
+        'international_guests',
+      ])
+    ),
+
+    outputLanguage: z.enum(['it', 'en', 'fr', 'es', 'de']).default('it'),
+
     region: z.string().nullable(),
 
     contactName: sanitizedString(),
