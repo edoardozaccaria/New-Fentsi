@@ -16,20 +16,20 @@ main ─────────────────────────
 
 ### Branch principali
 
-| Branch    | Ambiente    | Descrizione                                                  |
-|-----------|-------------|--------------------------------------------------------------|
-| `main`    | Produzione  | Sempre stabile. Merge solo da `develop` via Pull Request.    |
-| `develop` | Staging/QA  | Branch di integrazione. Riceve merge dalle feature branch.   |
+| Branch    | Ambiente   | Descrizione                                                |
+| --------- | ---------- | ---------------------------------------------------------- |
+| `main`    | Produzione | Sempre stabile. Merge solo da `develop` via Pull Request.  |
+| `develop` | Staging/QA | Branch di integrazione. Riceve merge dalle feature branch. |
 
 ### Branch di lavoro
 
-| Pattern             | Uso                                            |
-|---------------------|------------------------------------------------|
-| `feature/<nome>`    | Nuove funzionalità (es. `feature/user-profile`)|
-| `fix/<nome>`        | Bug fix (es. `fix/stripe-webhook-error`)       |
-| `chore/<nome>`      | Manutenzione, dipendenze, config               |
-| `docs/<nome>`       | Solo documentazione                            |
-| `hotfix/<nome>`     | Fix urgenti in produzione — merge diretto su `main` + `develop` |
+| Pattern          | Uso                                                             |
+| ---------------- | --------------------------------------------------------------- |
+| `feature/<nome>` | Nuove funzionalità (es. `feature/user-profile`)                 |
+| `fix/<nome>`     | Bug fix (es. `fix/stripe-webhook-error`)                        |
+| `chore/<nome>`   | Manutenzione, dipendenze, config                                |
+| `docs/<nome>`    | Solo documentazione                                             |
+| `hotfix/<nome>`  | Fix urgenti in produzione — merge diretto su `main` + `develop` |
 
 ---
 
@@ -58,6 +58,7 @@ Tipi: feat | fix | chore | docs | style | refactor | test | ci
 ```
 
 Esempi:
+
 - `feat(auth): add Google OAuth login`
 - `fix(api): handle null response from payment provider`
 - `chore(deps): upgrade next to 15.x`
