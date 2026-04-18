@@ -1,6 +1,8 @@
 // AI prompt building for Fentsi event plan generation.
 // Used by POST /api/generate-suppliers.
 
+import type { DiscoveredSuppliers } from '@/types/supplier-discovery.types';
+
 // ---------------------------------------------------------------------------
 // Input type
 // ---------------------------------------------------------------------------
@@ -18,6 +20,7 @@ export interface EventPlanInput {
   specialRequirements: string[];
   specialRequests?: string;
   outputLanguage: string;
+  realSuppliers?: DiscoveredSuppliers;
 }
 
 // ---------------------------------------------------------------------------
@@ -42,6 +45,23 @@ const DURATION_LABELS: Record<string, string> = {
   weekend: 'full weekend (2 days)',
 };
 
+function formatRealCandidates(realSuppliers: DiscoveredSuppliers): string {
+  const lines: string[] = [];
+  for (const [category, candidates] of Object.entries(realSuppliers)) {
+    if (candidates.length === 0) continue;
+    lines.push(`\nCategory: ${category}`);
+    candidates.forEach((c, i) => {
+      const parts = [`  ${i + 1}. ${c.name}`];
+      if (c.address) parts.push(`     Address: ${c.address}`);
+      if (c.website) parts.push(`     Website: ${c.website}`);
+      if (c.snippet) parts.push(`     About: ${c.snippet}`);
+      if (c.rating != null) parts.push(`     Rating: ${c.rating}/10`);
+      lines.push(parts.join('\n'));
+    });
+  }
+  return lines.join('\n');
+}
+
 export function buildPrompt(data: EventPlanInput): string {
   const budget = data.budgetEur;
   const contingency = Math.round(budget * 0.1);
@@ -54,6 +74,33 @@ export function buildPrompt(data: EventPlanInput): string {
       : '  - none';
 
   const durationLabel = DURATION_LABELS[data.duration] ?? data.duration;
+
+  const hasRealSuppliers =
+    data.realSuppliers && Object.keys(data.realSuppliers).length > 0;
+
+  const step2 = hasRealSuppliers
+    ? `REAL SUPPLIER CANDIDATES (fetched from live directories):
+${formatRealCandidates(data.realSuppliers!)}
+
+STEP 2 — For each service category, emit exactly 3 supplier lines using the real candidates above:
+{"type":"supplier","data":{"name":"STRING","category":"STRING","description":"STRING","estimatedPriceUsd":NUMBER,"city":"${data.city}","isVerified":false}}
+
+Rules for suppliers:
+- Prefer real candidates from the list above. Use their exact name. Keep isVerified false.
+- Write "description" as 1-2 sentences explaining why this supplier fits this specific event (style, budget, requirements).
+- If fewer than 3 real candidates exist for a category, invent the remaining ones — plausible, specific to ${data.city}.
+- "category" must exactly match a service name from the service list above.
+- "estimatedPriceUsd" contains a EUR amount proportional to the category budget allocation.
+- Emit exactly 3 suppliers per category, no more, no less.`
+    : `STEP 2 — Then emit exactly 3 supplier lines per service category:
+{"type":"supplier","data":{"name":"STRING","category":"STRING","description":"STRING","estimatedPriceUsd":NUMBER,"city":"${data.city}","isVerified":false}}
+
+Rules for suppliers:
+- "category" must exactly match a service name from the service list above
+- "estimatedPriceUsd" contains a EUR amount (field name is legacy)
+- prices must be realistic and proportional to the total budget
+- all names and descriptions must be fictional but plausible, specific to ${data.city}
+- generate exactly 3 suppliers per category, no more, no less`;
 
   return `You are an expert Italian event planning concierge specialising in luxury and mid-range events in Italy.
 
@@ -90,15 +137,7 @@ Rules for plan_overview:
 - catering.approach: one sentence on service style (e.g. buffet, plated, live stations)
 - catering.menuConcept: 1–2 sentences on menu theme and how it addresses the special requirements above
 
-STEP 2 — Then emit exactly 3 supplier lines per service category:
-{"type":"supplier","data":{"name":"STRING","category":"STRING","description":"STRING","estimatedPriceUsd":NUMBER,"city":"${data.city}","isVerified":false}}
-
-Rules for suppliers:
-- "category" must exactly match a service name from the service list above
-- "estimatedPriceUsd" contains a EUR amount (field name is legacy)
-- prices must be realistic and proportional to the total budget
-- all names and descriptions must be fictional but plausible, specific to ${data.city}
-- generate exactly 3 suppliers per category, no more, no less
+${step2}
 
 STEP 3 — Final line:
 {"type":"done","status":"ok"}`;

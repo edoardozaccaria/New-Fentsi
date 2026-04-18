@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { buildPrompt } from '@/lib/ai';
+import { discoverSuppliers } from '@/services/supplier-discovery';
 import {
   checkRateLimit,
   getRateLimitKey,
@@ -100,6 +101,18 @@ export async function POST(request: Request) {
   let planOverview: PlanOverview | null = null;
   let eventId: string | null = null;
 
+  // Pre-fetch real supplier candidates from Foursquare + Tavily
+  const foursquareKey = process.env.FOURSQUARE_API_KEY ?? '';
+  const tavilyKey = process.env.TAVILY_API_KEY ?? '';
+
+  let realSuppliers = {};
+  if (foursquareKey || tavilyKey) {
+    realSuppliers = await discoverSuppliers(data.requiredServices, data.city, {
+      foursquareKey,
+      tavilyKey,
+    });
+  }
+
   const prompt = buildPrompt({
     eventType: data.eventType,
     date: data.eventDate,
@@ -113,6 +126,7 @@ export async function POST(request: Request) {
     specialRequirements: data.specialRequirements,
     specialRequests: data.specialRequests,
     outputLanguage: data.outputLanguage,
+    realSuppliers,
   });
 
   const stream = new ReadableStream({
