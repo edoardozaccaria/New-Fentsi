@@ -63,3 +63,109 @@ describe('FP_AWARDS', () => {
     }
   });
 });
+
+import { checkBadgeEligibility } from './badges';
+import type {
+  GamificationEvent,
+  AwardContext,
+} from '@/types/gamification.types';
+
+describe('checkBadgeEligibility', () => {
+  const baseContext: AwardContext = {
+    careerFpBefore: 0,
+    badgesEarned: [],
+  };
+
+  it('awards first_light on WIZARD_COMPLETED if not already earned', () => {
+    const event: GamificationEvent = {
+      action: 'WIZARD_COMPLETED',
+      userId: 'u1',
+    };
+    expect(checkBadgeEligibility(event, baseContext)).toContain('first_light');
+  });
+
+  it('does not re-award first_light if already earned', () => {
+    const event: GamificationEvent = {
+      action: 'WIZARD_COMPLETED',
+      userId: 'u1',
+    };
+    const ctx: AwardContext = { ...baseContext, badgesEarned: ['first_light'] };
+    expect(checkBadgeEligibility(event, ctx)).not.toContain('first_light');
+  });
+
+  it('awards the_speedrunner when wizard completed in under 4 minutes', () => {
+    const event: GamificationEvent = {
+      action: 'WIZARD_COMPLETED',
+      userId: 'u1',
+      metadata: { wizardDurationMs: 3 * 60 * 1000 },
+    };
+    const ctx: AwardContext = {
+      ...baseContext,
+      eventMeta: { wizardDurationMs: 3 * 60 * 1000 },
+    };
+    expect(checkBadgeEligibility(event, ctx)).toContain('the_speedrunner');
+  });
+
+  it('does not award the_speedrunner when wizard took more than 4 minutes', () => {
+    const event: GamificationEvent = {
+      action: 'WIZARD_COMPLETED',
+      userId: 'u1',
+    };
+    const ctx: AwardContext = {
+      ...baseContext,
+      eventMeta: { wizardDurationMs: 5 * 60 * 1000 },
+    };
+    expect(checkBadgeEligibility(event, ctx)).not.toContain('the_speedrunner');
+  });
+
+  it('awards grand_architect when HEALTH_SCORE_THRESHOLD metadata.threshold is 90', () => {
+    const event: GamificationEvent = {
+      action: 'HEALTH_SCORE_THRESHOLD',
+      userId: 'u1',
+      metadata: { threshold: 90 },
+    };
+    expect(checkBadgeEligibility(event, baseContext)).toContain(
+      'grand_architect'
+    );
+  });
+
+  it('does not award grand_architect for threshold 60', () => {
+    const event: GamificationEvent = {
+      action: 'HEALTH_SCORE_THRESHOLD',
+      userId: 'u1',
+      metadata: { threshold: 60 },
+    };
+    expect(checkBadgeEligibility(event, baseContext)).not.toContain(
+      'grand_architect'
+    );
+  });
+
+  it('awards the_conductor when confirmedVendorCount reaches 3', () => {
+    const event: GamificationEvent = {
+      action: 'VENDOR_CONFIRMED',
+      userId: 'u1',
+    };
+    const ctx: AwardContext = {
+      ...baseContext,
+      eventMeta: { confirmedVendorCount: 3 },
+    };
+    expect(checkBadgeEligibility(event, ctx)).toContain('the_conductor');
+  });
+
+  it('does not award the_conductor when confirmedVendorCount is 2', () => {
+    const event: GamificationEvent = {
+      action: 'VENDOR_CONFIRMED',
+      userId: 'u1',
+    };
+    const ctx: AwardContext = {
+      ...baseContext,
+      eventMeta: { confirmedVendorCount: 2 },
+    };
+    expect(checkBadgeEligibility(event, ctx)).not.toContain('the_conductor');
+  });
+
+  it('returns empty array for actions with no badge triggers', () => {
+    const event: GamificationEvent = { action: 'RSVP_ACCEPTED', userId: 'u1' };
+    expect(checkBadgeEligibility(event, baseContext)).toHaveLength(0);
+  });
+});
