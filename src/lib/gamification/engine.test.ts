@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { computeLevel, LEVEL_THRESHOLDS } from './levels';
+import { computeLevel } from './levels';
+import type { GamificationAction } from '@/types/gamification.types';
 import { FP_AWARDS } from './events';
 
 describe('computeLevel', () => {
@@ -58,8 +59,8 @@ describe('FP_AWARDS', () => {
       'HEALTH_SCORE_THRESHOLD',
     ];
     for (const action of allActions) {
-      expect(FP_AWARDS[action]).toBeTypeOf('number');
-      expect(FP_AWARDS[action]).toBeGreaterThan(0);
+      expect(FP_AWARDS[action as GamificationAction]).toBeTypeOf('number');
+      expect(FP_AWARDS[action as GamificationAction]).toBeGreaterThan(0);
     }
   });
 });

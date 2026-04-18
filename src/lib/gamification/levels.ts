@@ -15,7 +15,7 @@ export function computeLevel(careerFp: number): number {
 }
 
 export function computeLevelTitle(careerFp: number): string {
-  let title = LEVEL_THRESHOLDS[0].title;
+  let title: string = LEVEL_THRESHOLDS[0].title;
   for (const threshold of LEVEL_THRESHOLDS) {
     if (careerFp >= threshold.minFp) title = threshold.title;
   }
