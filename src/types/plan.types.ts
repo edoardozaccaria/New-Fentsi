@@ -166,3 +166,25 @@ export interface PlanAllocation {
   percent: number;
   amount_usd: number;
 }
+
+// ---------------------------------------------------------------------------
+// Gamification-adjacent types (used by Domain System plan)
+// ---------------------------------------------------------------------------
+
+export type DomainType =
+  | 'core'
+  | 'budget'
+  | 'people'
+  | 'venue'
+  | 'experience'
+  | 'execution';
+
+export type EventStatus = 'draft' | 'active' | 'completed' | 'archived';
+
+export type VibeWord =
+  | 'intimate'
+  | 'electric'
+  | 'elegant'
+  | 'wild'
+  | 'cozy'
+  | 'grand';
