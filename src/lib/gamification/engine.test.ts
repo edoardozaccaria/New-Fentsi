@@ -169,3 +169,42 @@ describe('checkBadgeEligibility', () => {
     expect(checkBadgeEligibility(event, baseContext)).toHaveLength(0);
   });
 });
+
+import { computeAward } from './engine';
+
+describe('computeAward', () => {
+  it('returns correct points and no badge for STEP_COMPLETED', () => {
+    const result = computeAward(
+      { action: 'STEP_COMPLETED', userId: 'u1' },
+      { careerFpBefore: 0, badgesEarned: [] }
+    );
+    expect(result.points).toBe(10);
+    expect(result.badgeSlugs).toHaveLength(0);
+    expect(result.newLevel).toBeUndefined();
+  });
+
+  it('returns 100 FP and first_light badge on WIZARD_COMPLETED', () => {
+    const result = computeAward(
+      { action: 'WIZARD_COMPLETED', userId: 'u1' },
+      { careerFpBefore: 0, badgesEarned: [] }
+    );
+    expect(result.points).toBe(100);
+    expect(result.badgeSlugs).toContain('first_light');
+  });
+
+  it('detects level-up when FP crosses a threshold', () => {
+    const result = computeAward(
+      { action: 'WIZARD_COMPLETED', userId: 'u1' },
+      { careerFpBefore: 490, badgesEarned: ['first_light'] }
+    );
+    expect(result.newLevel).toBe(2);
+  });
+
+  it('returns no newLevel when level does not change', () => {
+    const result = computeAward(
+      { action: 'STEP_COMPLETED', userId: 'u1' },
+      { careerFpBefore: 1000, badgesEarned: [] }
+    );
+    expect(result.newLevel).toBeUndefined();
+  });
+});
