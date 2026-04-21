@@ -1,5 +1,4 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { buildPrompt } from '@/lib/ai';
 import { discoverSuppliers } from '@/services/supplier-discovery';
@@ -8,6 +7,8 @@ import {
   getRateLimitKey,
   rateLimitResponse,
 } from '@/lib/rate-limit';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import type { PlanOverview } from '@/types/plan.types';
 
 export const runtime = 'nodejs';
@@ -58,25 +59,11 @@ export async function POST(request: Request) {
   }
   const data = parsed.data;
 
-  // --- Auth check ---
-  const authHeader = request.headers.get('authorization');
-  const accessToken = authHeader?.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : null;
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-    global: accessToken
-      ? { headers: { Authorization: `Bearer ${accessToken}` } }
-      : {},
-  });
-
+  // --- Auth check (cookies-based, via @supabase/ssr) ---
+  const supabaseUser = await createSupabaseServerClient();
   const {
     data: { user },
-  } = await supabaseClient.auth.getUser();
+  } = await supabaseUser.auth.getUser();
 
   if (!user) {
     return Response.json(
@@ -186,8 +173,8 @@ export async function POST(request: Request) {
           }
         }
 
-        // --- Save to Supabase ---
-        const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+        // --- Save to Supabase (service role bypasses RLS for admin inserts) ---
+        const supabaseAdmin = createSupabaseServiceClient();
 
         const { data: eventRow, error: eventError } = await supabaseAdmin
           .from('events')
