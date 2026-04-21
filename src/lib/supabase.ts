@@ -1,6 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
+// Compatibility shim — new code should import from './supabase/client' or './supabase/server'.
+// The singleton below is preserved for existing client components during the Phase 1 migration.
+import { createSupabaseBrowserClient } from './supabase/client';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+export { createSupabaseBrowserClient } from './supabase/client';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+/** @deprecated Use `createSupabaseBrowserClient()` from '@/lib/supabase/client'. */
+export const supabase = createSupabaseBrowserClient();

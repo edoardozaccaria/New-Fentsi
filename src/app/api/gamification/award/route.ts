@@ -1,7 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { computeAward } from '@/lib/gamification/engine';
 import { computeLevel } from '@/lib/gamification/levels';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import type {
   GamificationEvent,
   AwardContext,
@@ -37,25 +38,10 @@ const RequestSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const authHeader = request.headers.get('authorization');
-  const accessToken = authHeader?.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : null;
-  if (!accessToken) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-
-  const userClient = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: `Bearer ${accessToken}` } },
-  });
-
+  const supabaseUser = await createSupabaseServerClient();
   const {
     data: { user },
-  } = await userClient.auth.getUser();
+  } = await supabaseUser.auth.getUser();
   if (!user) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -95,7 +81,7 @@ export async function POST(request: Request) {
     return Response.json({ award });
   }
 
-  const admin = createClient(supabaseUrl, supabaseServiceKey);
+  const admin = createSupabaseServiceClient();
 
   await admin.from('fp_transactions').insert({
     user_id: user.id,
