@@ -11,7 +11,7 @@ describe('GET /auth/callback', () => {
     vi.clearAllMocks();
   });
 
-  it('exchanges code for session and redirects to /dashboard', async () => {
+  it('exchanges code for session and redirects to post-auth landing', async () => {
     const exchange = vi.fn().mockResolvedValue({ error: null });
     const { createSupabaseServerClient } =
       await import('@/lib/supabase/server');
@@ -25,7 +25,8 @@ describe('GET /auth/callback', () => {
 
     expect(exchange).toHaveBeenCalledWith('abc123');
     expect(res.status).toBe(307);
-    expect(res.headers.get('location')).toContain('/dashboard');
+    const location = res.headers.get('location')!;
+    expect(new URL(location).pathname).toBe('/');
   });
 
   it('honors the ?next= parameter when provided', async () => {

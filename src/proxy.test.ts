@@ -50,7 +50,7 @@ describe('proxy', () => {
     expect(res.status).not.toBe(307);
   });
 
-  it('redirects authenticated users away from /login to /dashboard', async () => {
+  it('redirects authenticated users away from /login to post-auth landing', async () => {
     const { createServerClient } = await import('@supabase/ssr');
     (createServerClient as ReturnType<typeof vi.fn>).mockReturnValue({
       auth: {
@@ -65,7 +65,8 @@ describe('proxy', () => {
     const res = await proxy(makeRequest('/login'));
 
     expect(res.status).toBe(307);
-    expect(res.headers.get('location')).toContain('/dashboard');
+    const location = res.headers.get('location')!;
+    expect(new URL(location).pathname).toBe('/');
   });
 
   it('allows public route / through without auth', async () => {

@@ -1,8 +1,12 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PROTECTED_PREFIXES = ['/dashboard', '/create-event', '/event-plan'];
+// `/create-event` is intentionally guest-accessible: the wizard collects input
+// from anonymous visitors and prompts sign-in at step 10 (see Step10Review).
+const PROTECTED_PREFIXES = ['/dashboard', '/event-plan'];
 const AUTH_ROUTES = ['/login'];
+// Post-auth landing page. Dashboard doesn't exist until Phase 2, so send to home.
+const POST_AUTH_LANDING = '/';
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PREFIXES.some(
@@ -49,7 +53,7 @@ export async function proxy(request: NextRequest) {
 
   if (user && isAuthRoute(pathname)) {
     const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
+    url.pathname = POST_AUTH_LANDING;
     url.search = '';
     return NextResponse.redirect(url);
   }
