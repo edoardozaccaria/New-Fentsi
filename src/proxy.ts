@@ -3,10 +3,9 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 // `/create-event` is intentionally guest-accessible: the wizard collects input
 // from anonymous visitors and prompts sign-in at step 10 (see Step10Review).
-const PROTECTED_PREFIXES = ['/dashboard', '/event-plan'];
-const AUTH_ROUTES = ['/login'];
-// Post-auth landing page. Dashboard doesn't exist until Phase 2, so send to home.
-const POST_AUTH_LANDING = '/';
+const PROTECTED_PREFIXES = ['/dashboard', '/event-plan', '/checkout'];
+const AUTH_ROUTES = ['/login', '/signup', '/forgot-password'];
+const POST_AUTH_LANDING = '/dashboard';
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PREFIXES.some(

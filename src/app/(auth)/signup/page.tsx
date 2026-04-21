@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { LoginButtons } from './LoginButtons';
-import { SignInForm } from '@/components/auth/SignInForm';
+import { LoginButtons } from '../login/LoginButtons';
+import { SignupForm } from '@/components/auth/SignupForm';
 
 type SearchParams = Promise<{ next?: string; error?: string }>;
 
-export default async function LoginPage({
+export default async function SignupPage({
   searchParams,
 }: {
   searchParams: SearchParams;
@@ -16,10 +16,10 @@ export default async function LoginPage({
     <main className="flex-1 flex items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm flex flex-col items-center text-center">
         <h1 className="font-[family-name:var(--font-display)] text-4xl text-[#f5ecdc] mb-2">
-          Accedi a Fentsi
+          Crea il tuo account
         </h1>
         <p className="text-[#c9bca6] text-sm mb-8">
-          Continua con il tuo account per pianificare il tuo evento.
+          Pianifica il tuo evento in pochi minuti con Fentsi.
         </p>
 
         <LoginButtons appleEnabled={appleEnabled} next={next} />
@@ -30,25 +30,21 @@ export default async function LoginPage({
           <span className="h-px flex-1 bg-[#f5ecdc]/10" />
         </div>
 
-        <SignInForm next={next} />
+        <SignupForm next={next} />
 
         {error && (
           <p role="alert" className="mt-4 text-sm text-[#e8816b]">
-            {error === 'oauth'
-              ? 'Accesso non riuscito. Riprova.'
-              : error === 'no_code'
-                ? 'Sessione non valida. Riprova.'
-                : 'Si è verificato un errore.'}
+            Errore. Riprova.
           </p>
         )}
 
         <p className="mt-8 text-sm text-[#c9bca6]">
-          Non hai un account?{' '}
+          Hai già un account?{' '}
           <Link
-            href="/signup"
+            href="/login"
             className="text-[#f5ecdc] underline underline-offset-4"
           >
-            Registrati
+            Accedi
           </Link>
         </p>
       </div>

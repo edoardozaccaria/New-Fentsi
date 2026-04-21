@@ -66,7 +66,7 @@ describe('proxy', () => {
 
     expect(res.status).toBe(307);
     const location = res.headers.get('location')!;
-    expect(new URL(location).pathname).toBe('/');
+    expect(new URL(location).pathname).toBe('/dashboard');
   });
 
   it('allows public route / through without auth', async () => {
