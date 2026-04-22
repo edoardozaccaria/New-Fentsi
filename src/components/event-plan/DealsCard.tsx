@@ -49,7 +49,7 @@ export function DealsCard({ title, deals }: DealsCardProps) {
       </p>
 
       <ul className="space-y-2">
-        {deals.map((link, i) => {
+        {deals.map((link) => {
           const badge = SOURCE_BADGE[link.source];
           return (
             <li
