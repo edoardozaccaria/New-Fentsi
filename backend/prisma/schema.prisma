@@ -1,0 +1,308 @@
+// ──────────────────────────────────────────────
+// Fentsi — AI Event Planner  ·  Prisma Schema
+// ──────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────
+
+enum UserPlan {
+  free
+  pro
+}
+
+enum EventType {
+  wedding
+  birthday
+  corporate
+  baby_shower
+  graduation
+  dinner_party
+  anniversary
+  conference
+  other
+}
+
+enum VenuePreference {
+  indoor
+  outdoor
+  hybrid
+  no_preference
+}
+
+enum WizardStatus {
+  pending
+  processing
+  completed
+  failed
+}
+
+enum PlanStatus {
+  draft
+  saved
+  archived
+}
+
+enum VendorType {
+  venue
+  catering
+  photography
+  videography
+  florist
+  dj
+  band
+  decorator
+  cake
+  planner
+  rental
+  transport
+  other
+}
+
+enum PriceRange {
+  budget
+  moderate
+  premium
+  luxury
+}
+
+enum QuoteStatus {
+  pending
+  sent
+  replied
+  closed
+}
+
+enum CoordinationStatus {
+  pending
+  active
+  completed
+  cancelled
+}
+
+// ─── Models ──────────────────────────────────
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  email         String    @unique
+  password_hash String
+  full_name     String
+  avatar_url    String?
+  plan          UserPlan  @default(free)
+  ai_credits    Int       @default(3)
+  is_verified   Boolean   @default(false)
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+
+  refresh_tokens            RefreshToken[]
+  wizard_submissions        WizardSubmission[]
+  event_plans               EventPlan[]
+  quote_requests            QuoteRequest[]
+  coordination_orders       CoordinationOrder[]        @relation("OrderUser")
+  assigned_coordination     CoordinationOrder[]        @relation("OrderAssignee")
+  password_reset_tokens     PasswordResetToken[]
+  email_verification_tokens EmailVerificationToken[]
+
+  @@index([email])
+  @@index([plan])
+  @@index([is_active])
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid()) @db.Uuid
+  user_id    String    @db.Uuid
+  token_hash String
+  expires_at DateTime
+  revoked_at DateTime?
+  ip_address String
+  user_agent String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([token_hash])
+  @@index([expires_at])
+  @@map("refresh_tokens")
+}
+
+model WizardSubmission {
+  id               String          @id @default(uuid()) @db.Uuid
+  user_id          String?         @db.Uuid
+  session_id       String?
+  event_type       EventType
+  event_date       String
+  guest_count      Int
+  budget_total     Decimal         @db.Decimal(12, 2)
+  budget_currency  String          @default("EUR")
+  location_city    String
+  location_lat     Decimal?        @db.Decimal(10, 7)
+  location_lng     Decimal?        @db.Decimal(10, 7)
+  venue_preference VenuePreference
+  aesthetic_style  Json
+  top_priorities   Json
+  services_wanted  Json
+  extra_notes      String?         @db.Text
+  status           WizardStatus    @default(pending)
+  created_at       DateTime        @default(now())
+
+  user       User?      @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  event_plan EventPlan?
+
+  @@index([user_id])
+  @@index([session_id])
+  @@index([status])
+  @@index([created_at])
+  @@map("wizard_submissions")
+}
+
+model EventPlan {
+  id                    String     @id @default(uuid()) @db.Uuid
+  wizard_submission_id  String     @unique @db.Uuid
+  user_id               String?    @db.Uuid
+  title                 String
+  event_type            String
+  event_date            String
+  location_city         String
+  guest_count           Int
+  budget_total          Decimal    @db.Decimal(12, 2)
+  ai_summary            String     @db.Text
+  budget_breakdown      Json
+  timeline              Json
+  ai_tips               Json
+  style_notes           String     @db.Text
+  status                PlanStatus @default(draft)
+  coordination_purchased Boolean   @default(false)
+  is_public             Boolean    @default(false)
+  generated_at          DateTime?
+  tokens_used           Int?
+  created_at            DateTime   @default(now())
+  updated_at            DateTime   @updatedAt
+
+  wizard_submission WizardSubmission  @relation(fields: [wizard_submission_id], references: [id], onDelete: Cascade)
+  user              User?             @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  vendors           PlanVendor[]
+  quote_requests    QuoteRequest[]
+  coordination_orders CoordinationOrder[]
+
+  @@index([user_id])
+  @@index([status])
+  @@index([is_public])
+  @@index([created_at])
+  @@map("event_plans")
+}
+
+model PlanVendor {
+  id              String     @id @default(uuid()) @db.Uuid
+  plan_id         String     @db.Uuid
+  foursquare_id   String
+  name            String
+  category        String
+  vendor_type     VendorType
+  address         String
+  city            String
+  lat             Decimal    @db.Decimal(10, 7)
+  lng             Decimal    @db.Decimal(10, 7)
+  price_range     PriceRange
+  rating          Decimal?   @db.Decimal(3, 1)
+  phone           String?
+  website         String?
+  instagram       String?
+  foursquare_url  String?
+  photo_urls      Json
+  ai_match_score  Int
+  ai_match_reason String     @db.Text
+  is_selected     Boolean    @default(false)
+  created_at      DateTime   @default(now())
+
+  plan           EventPlan      @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  quote_requests QuoteRequest[]
+
+  @@index([plan_id])
+  @@index([vendor_type])
+  @@index([city])
+  @@index([foursquare_id])
+  @@map("plan_vendors")
+}
+
+model QuoteRequest {
+  id           String      @id @default(uuid()) @db.Uuid
+  plan_id      String      @db.Uuid
+  user_id      String      @db.Uuid
+  vendor_id    String      @db.Uuid
+  user_message String      @db.Text
+  status       QuoteStatus @default(pending)
+  vendor_reply String?
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+
+  plan   EventPlan  @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  user   User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  vendor PlanVendor @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
+
+  @@index([plan_id])
+  @@index([user_id])
+  @@index([vendor_id])
+  @@index([status])
+  @@map("quote_requests")
+}
+
+model CoordinationOrder {
+  id            String             @id @default(uuid()) @db.Uuid
+  plan_id       String             @db.Uuid
+  user_id       String             @db.Uuid
+  status        CoordinationStatus @default(pending)
+  assigned_to   String?            @db.Uuid
+  package_price Decimal            @db.Decimal(10, 2)
+  notes         String?
+  created_at    DateTime           @default(now())
+  updated_at    DateTime           @updatedAt
+
+  plan     EventPlan @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  user     User      @relation("OrderUser", fields: [user_id], references: [id], onDelete: Cascade)
+  assignee User?     @relation("OrderAssignee", fields: [assigned_to], references: [id], onDelete: SetNull)
+
+  @@index([plan_id])
+  @@index([user_id])
+  @@index([assigned_to])
+  @@index([status])
+  @@map("coordination_orders")
+}
+
+model PasswordResetToken {
+  id         String    @id @default(uuid()) @db.Uuid
+  user_id    String    @db.Uuid
+  token_hash String
+  expires_at DateTime
+  used_at    DateTime?
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([token_hash])
+  @@index([expires_at])
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id         String   @id @default(uuid()) @db.Uuid
+  user_id    String   @db.Uuid
+  token_hash String
+  expires_at DateTime
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([token_hash])
+  @@index([expires_at])
+  @@map("email_verification_tokens")
+}

@@ -1,0 +1,2558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fentsi – AI-Powered Wedding & Event Planning | Plan Your Perfect Day</title>
+  <meta name="description" content="Fentsi is the AI-powered event planning platform that builds your perfect wedding or event in minutes. Get a complete plan, optimized budget, and curated vendor matches — all in one place." />
+  <meta name="keywords" content="AI wedding planner, event planning AI, wedding planning software, wedding vendors, event budget optimizer, wedding platform Italy" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://fentsi.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Fentsi – AI-Powered Wedding & Event Planning" />
+  <meta property="og:description" content="Answer 10 questions. Get a complete event plan with optimized budget and curated vendors. The smartest way to plan your perfect day." />
+  <meta property="og:url" content="https://fentsi.com/" />
+  <meta property="og:image" content="https://fentsi.com/og-image.jpg" />
+  <meta property="og:site_name" content="Fentsi" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Fentsi – AI-Powered Wedding & Event Planning" />
+  <meta name="twitter:description" content="Answer 10 questions. Get a complete event plan with optimized budget and curated vendors." />
+  <meta name="twitter:image" content="https://fentsi.com/og-image.jpg" />
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Fentsi",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "AI-powered wedding and event planning platform. Fentsi builds a complete event plan, optimizes your budget, and matches you with curated vendors in minutes.",
+        "url": "https://fentsi.com",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        }
+      },
+      {
+        "@type": "Organization",
+        "name": "Fentsi",
+        "url": "https://fentsi.com",
+        "logo": "https://fentsi.com/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "hello@fentsi.com"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Fentsi?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Fentsi is an AI-powered platform that helps you plan weddings and events. You answer 10 guided questions and Fentsi creates a complete event plan, optimizes your budget, and matches you with the best vendors for your needs."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Fentsi work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Answer 10 simple questions about your event type, budget, style, guest count, and priorities. Fentsi's AI then builds a structured event plan, allocates budget across categories like catering, photography, and venue, and proposes the most suitable vendors and locations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Fentsi free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Fentsi offers a free plan for couples planning their event. Pro and Business plans are available for wedding planners, agencies, and venues with advanced features and priority vendor access."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM — FENTSI
+       References: Apple (whitespace, type scale, scroll reveals),
+       Tesla (dark hero, bold statements)
+    ============================================================ */
+
+    :root {
+      /* Colors */
+      --c-bg:        #FAFAF8;
+      --c-bg-dark:   #0A0A0A;
+      --c-surface:   #FFFFFF;
+      --c-surface2:  #F5F5F2;
+      --c-border:    #E8E8E4;
+      --c-text:      #1A1A1A;
+      --c-text-2:    #6B6B6B;
+      --c-text-inv:  #FFFFFF;
+      --c-accent:    #C9956C;       /* warm champagne gold */
+      --c-accent-2:  #E8D5C8;       /* blush */
+      --c-accent-dk: #A67550;
+      --c-green:     #2D7A4F;
+
+      /* Type */
+      --font:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --fw-light:    300;
+      --fw-regular:  400;
+      --fw-medium:   500;
+      --fw-semi:     600;
+      --fw-bold:     700;
+      --fw-black:    900;
+
+      /* Spacing */
+      --sp-xs:  0.5rem;
+      --sp-sm:  1rem;
+      --sp-md:  2rem;
+      --sp-lg:  4rem;
+      --sp-xl:  8rem;
+
+      /* Radius */
+      --r-sm:   0.5rem;
+      --r-md:   1rem;
+      --r-lg:   1.5rem;
+      --r-xl:   2rem;
+      --r-pill: 100px;
+
+      /* Shadow */
+      --sh-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+      --sh-md:  0 4px 24px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+      --sh-lg:  0 16px 64px rgba(0,0,0,.10), 0 4px 16px rgba(0,0,0,.06);
+      --sh-xl:  0 32px 96px rgba(0,0,0,.14);
+
+      /* Transitions */
+      --t-fast: 150ms cubic-bezier(.4,0,.2,1);
+      --t-base: 300ms cubic-bezier(.4,0,.2,1);
+      --t-slow: 600ms cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--c-bg);
+      color: var(--c-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ---- Utility ---- */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+    .container--wide { max-width: 1400px; }
+    .container--narrow { max-width: 760px; }
+
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ---- Scroll reveal ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity var(--t-slow), transform var(--t-slow);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 100ms; }
+    .reveal-delay-2 { transition-delay: 200ms; }
+    .reveal-delay-3 { transition-delay: 300ms; }
+    .reveal-delay-4 { transition-delay: 400ms; }
+
+    /* ---- Typography ---- */
+    .display {
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: var(--fw-black);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .headline {
+      font-size: clamp(2rem, 4.5vw, 3.75rem);
+      font-weight: var(--fw-bold);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+    .title {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: var(--fw-bold);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .body-lg {
+      font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+      line-height: 1.7;
+      color: var(--c-text-2);
+    }
+    .label {
+      font-size: 0.75rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--c-accent);
+    }
+
+    /* ---- Buttons ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.75rem;
+      border-radius: var(--r-pill);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: var(--fw-semi);
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all var(--t-base);
+      white-space: nowrap;
+    }
+    .btn--primary {
+      background: var(--c-text);
+      color: var(--c-text-inv);
+    }
+    .btn--primary:hover {
+      background: #333;
+      transform: translateY(-1px);
+      box-shadow: var(--sh-md);
+    }
+    .btn--accent {
+      background: var(--c-accent);
+      color: var(--c-text-inv);
+    }
+    .btn--accent:hover {
+      background: var(--c-accent-dk);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px rgba(201,149,108,.35);
+    }
+    .btn--ghost {
+      background: transparent;
+      color: var(--c-text);
+      border: 1.5px solid var(--c-border);
+    }
+    .btn--ghost:hover {
+      border-color: var(--c-text);
+      transform: translateY(-1px);
+    }
+    .btn--ghost-inv {
+      background: transparent;
+      color: var(--c-text-inv);
+      border: 1.5px solid rgba(255,255,255,0.3);
+    }
+    .btn--ghost-inv:hover {
+      border-color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.1);
+    }
+    .btn--lg {
+      padding: 1.125rem 2.25rem;
+      font-size: 1.0625rem;
+    }
+    .btn--sm {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+    }
+
+    /* ---- NAV ---- */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1.25rem 0;
+      transition: all var(--t-base);
+    }
+    .nav.scrolled {
+      background: rgba(250,250,248,0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      padding: 0.875rem 0;
+      border-bottom: 1px solid var(--c-border);
+      box-shadow: 0 1px 0 rgba(0,0,0,.04);
+    }
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav__logo {
+      font-size: 1.5rem;
+      font-weight: var(--fw-black);
+      letter-spacing: -0.04em;
+      color: var(--c-text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav__logo-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--c-accent);
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav__links a {
+      text-decoration: none;
+      color: var(--c-text-2);
+      font-size: 0.9375rem;
+      font-weight: var(--fw-medium);
+      transition: color var(--t-fast);
+    }
+    .nav__links a:hover { color: var(--c-text); }
+    .nav__links a.active { color: var(--c-text); }
+    .nav__cta { display: flex; align-items: center; gap: 0.75rem; }
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .nav__hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--c-text);
+      border-radius: 2px;
+      transition: all var(--t-base);
+    }
+
+    /* Mobile nav */
+    .nav__mobile {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--c-bg);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .nav__mobile.open { display: flex; }
+    .nav__mobile a {
+      font-size: 2rem;
+      font-weight: var(--fw-bold);
+      color: var(--c-text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav__mobile-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: none; border: none;
+      font-size: 1.5rem; cursor: pointer;
+      color: var(--c-text);
+    }
+
+    /* ============================================================
+       PAGES — shown/hidden via JS routing
+    ============================================================ */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ============================================================
+       HOME — HERO
+    ============================================================ */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      background: var(--c-bg-dark);
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 0 6rem;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(201,149,108,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(201,149,108,.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(201,149,108,.15);
+      border: 1px solid rgba(201,149,108,.3);
+      border-radius: var(--r-pill);
+      padding: 0.375rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: var(--fw-semi);
+      color: var(--c-accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 1.75rem;
+    }
+    .hero__eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--c-accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    .hero__title {
+      font-size: clamp(2.75rem, 6vw, 5.5rem);
+      font-weight: var(--fw-black);
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      color: #FFFFFF;
+      margin-bottom: 1.5rem;
+    }
+    .hero__title em {
+      font-style: normal;
+      color: var(--c-accent);
+    }
+    .hero__sub {
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+    }
+    .hero__actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .hero__stats {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .hero__stat-num {
+      font-size: 1.75rem;
+      font-weight: var(--fw-black);
+      color: #FFFFFF;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .hero__stat-label {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 0.25rem;
+    }
+
+    /* Hero visual — gamified card stack */
+    .hero__visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero__card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border-radius: var(--r-xl);
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+    }
+    .hero__card-step {
+      font-size: 0.75rem;
+      font-weight: var(--fw-semi);
+      color: var(--c-accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .hero__card-q {
+      font-size: 1.25rem;
+      font-weight: var(--fw-bold);
+      color: #FFFFFF;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    .hero__card-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .hero__card-opt {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-md);
+      padding: 0.875rem 1rem;
+      cursor: pointer;
+      transition: all var(--t-base);
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9375rem;
+      font-weight: var(--fw-medium);
+    }
+    .hero__card-opt:hover,
+    .hero__card-opt.selected {
+      border-color: var(--c-accent);
+      background: rgba(201,149,108,.12);
+      color: #FFFFFF;
+    }
+    .hero__card-opt.selected .hero__card-opt-icon { background: var(--c-accent); }
+    .hero__card-opt-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--r-sm);
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      transition: background var(--t-base);
+      flex-shrink: 0;
+    }
+    .hero__card-progress {
+      display: flex;
+      gap: 4px;
+      margin-top: 1.5rem;
+    }
+    .hero__card-pip {
+      height: 3px;
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+    .hero__card-pip.done { background: var(--c-accent); }
+    .hero__card-pip.active { background: var(--c-accent); opacity: 0.5; }
+
+    /* ============================================================
+       TRUST BAR
+    ============================================================ */
+    .trust {
+      padding: 2.5rem 0;
+      background: var(--c-surface);
+      border-bottom: 1px solid var(--c-border);
+    }
+    .trust__inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(2rem, 5vw, 5rem);
+      flex-wrap: wrap;
+    }
+    .trust__item {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      color: var(--c-text-2);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+    }
+    .trust__icon {
+      width: 20px; height: 20px;
+      color: var(--c-accent);
+    }
+
+    /* ============================================================
+       HOW IT WORKS
+    ============================================================ */
+    .how {
+      padding: var(--sp-xl) 0;
+      background: var(--c-bg);
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: clamp(3rem, 6vw, 5rem);
+    }
+    .section-header .label { margin-bottom: 1rem; display: block; }
+    .section-header .headline { margin-bottom: 1rem; }
+    .section-header .body-lg { max-width: 580px; margin: 0 auto; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+    }
+    .step-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-lg);
+      padding: 1.75rem 1.5rem;
+      position: relative;
+      transition: all var(--t-base);
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sh-md);
+      border-color: var(--c-accent-2);
+    }
+    .step-card__num {
+      font-size: 0.6875rem;
+      font-weight: var(--fw-black);
+      color: var(--c-accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.875rem;
+    }
+    .step-card__icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.875rem;
+      display: block;
+    }
+    .step-card__title {
+      font-size: 0.9375rem;
+      font-weight: var(--fw-bold);
+      color: var(--c-text);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .step-card__desc {
+      font-size: 0.8125rem;
+      color: var(--c-text-2);
+      line-height: 1.55;
+    }
+
+    /* ============================================================
+       FEATURES
+    ============================================================ */
+    .features {
+      padding: var(--sp-xl) 0;
+      background: var(--c-bg-dark);
+      color: var(--c-text-inv);
+    }
+    .features .label { color: var(--c-accent); }
+    .features .headline { color: #FFFFFF; }
+    .features .body-lg { color: rgba(255,255,255,.55); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: rgba(255,255,255,.06);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      margin-top: 4rem;
+    }
+    .feature-cell {
+      background: var(--c-bg-dark);
+      padding: 2.5rem 2rem;
+      transition: background var(--t-base);
+    }
+    .feature-cell:hover { background: #111; }
+    .feature-cell__icon {
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+    .feature-cell__title {
+      font-size: 1.125rem;
+      font-weight: var(--fw-bold);
+      color: #FFFFFF;
+      margin-bottom: 0.625rem;
+      letter-spacing: -0.01em;
+    }
+    .feature-cell__desc {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,.45);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       PROVIDERS
+    ============================================================ */
+    .providers {
+      padding: var(--sp-xl) 0;
+      background: var(--c-bg);
+    }
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 3.5rem;
+    }
+    .provider-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-lg);
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      transition: all var(--t-base);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .provider-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--c-accent-2) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--t-base);
+    }
+    .provider-card:hover { transform: translateY(-4px); box-shadow: var(--sh-md); }
+    .provider-card:hover::before { opacity: 0.4; }
+    .provider-card__icon {
+      font-size: 2.25rem;
+      display: block;
+      margin-bottom: 0.875rem;
+      position: relative;
+    }
+    .provider-card__name {
+      font-size: 0.9375rem;
+      font-weight: var(--fw-bold);
+      color: var(--c-text);
+      margin-bottom: 0.375rem;
+      position: relative;
+    }
+    .provider-card__desc {
+      font-size: 0.8rem;
+      color: var(--c-text-2);
+      position: relative;
+    }
+
+    /* ============================================================
+       SOCIAL PROOF
+    ============================================================ */
+    .social-proof {
+      padding: var(--sp-xl) 0;
+      background: var(--c-surface);
+      border-top: 1px solid var(--c-border);
+      border-bottom: 1px solid var(--c-border);
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .testimonial {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-lg);
+      padding: 2rem;
+    }
+    .testimonial__stars {
+      color: var(--c-accent);
+      font-size: 0.875rem;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+    }
+    .testimonial__text {
+      font-size: 0.9375rem;
+      color: var(--c-text);
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 1.25rem;
+    }
+    .testimonial__author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .testimonial__avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--c-accent-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      font-weight: var(--fw-bold);
+      color: var(--c-accent-dk);
+      flex-shrink: 0;
+    }
+    .testimonial__name {
+      font-size: 0.875rem;
+      font-weight: var(--fw-semi);
+      color: var(--c-text);
+    }
+    .testimonial__role {
+      font-size: 0.75rem;
+      color: var(--c-text-2);
+    }
+
+    /* ============================================================
+       FOR VENDORS (B2B)
+    ============================================================ */
+    .b2b {
+      padding: var(--sp-xl) 0;
+      background: var(--c-bg);
+    }
+    .b2b__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .b2b__badge {
+      display: inline-block;
+      background: var(--c-accent);
+      color: #FFF;
+      font-size: 0.7rem;
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--r-pill);
+      margin-bottom: 1.25rem;
+    }
+    .b2b__list {
+      list-style: none;
+      margin: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .b2b__list li {
+      display: flex;
+      gap: 0.875rem;
+      font-size: 0.9375rem;
+      color: var(--c-text);
+      line-height: 1.5;
+    }
+    .b2b__list li::before {
+      content: '✓';
+      width: 22px; height: 22px;
+      min-width: 22px;
+      background: var(--c-accent);
+      color: #FFF;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: var(--fw-black);
+      margin-top: 1px;
+    }
+    .b2b__visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .b2b__metric {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-lg);
+      padding: 1.5rem;
+    }
+    .b2b__metric-val {
+      font-size: 2rem;
+      font-weight: var(--fw-black);
+      letter-spacing: -0.04em;
+      color: var(--c-text);
+      line-height: 1;
+    }
+    .b2b__metric-val span { color: var(--c-accent); }
+    .b2b__metric-label {
+      font-size: 0.8rem;
+      color: var(--c-text-2);
+      margin-top: 0.375rem;
+    }
+    .b2b__metric--wide { grid-column: span 2; }
+
+    /* ============================================================
+       FAQ
+    ============================================================ */
+    .faq {
+      padding: var(--sp-xl) 0;
+      background: var(--c-surface);
+    }
+    .faq__list {
+      max-width: 720px;
+      margin: 3.5rem auto 0;
+    }
+    .faq__item {
+      border-bottom: 1px solid var(--c-border);
+    }
+    .faq__question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: var(--fw-semi);
+      color: var(--c-text);
+      text-align: left;
+      transition: color var(--t-fast);
+    }
+    .faq__question:hover { color: var(--c-accent); }
+    .faq__chevron {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+      transition: transform var(--t-base);
+    }
+    .faq__item.open .faq__chevron { transform: rotate(180deg); }
+    .faq__answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--t-slow), padding var(--t-base);
+    }
+    .faq__item.open .faq__answer {
+      max-height: 400px;
+    }
+    .faq__answer p {
+      font-size: 0.9375rem;
+      color: var(--c-text-2);
+      line-height: 1.75;
+      padding-bottom: 1.5rem;
+    }
+
+    /* ============================================================
+       CTA BANNER
+    ============================================================ */
+    .cta-banner {
+      padding: var(--sp-xl) 0;
+      background: var(--c-bg-dark);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(201,149,108,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner__title {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: var(--fw-black);
+      letter-spacing: -0.035em;
+      color: #FFFFFF;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+    .cta-banner__title em { font-style: normal; color: var(--c-accent); }
+    .cta-banner__sub {
+      font-size: 1.125rem;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-banner__actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      padding: 4rem 0 2.5rem;
+      background: var(--c-bg-dark);
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .footer__brand p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,.4);
+      margin-top: 0.875rem;
+      line-height: 1.65;
+      max-width: 260px;
+    }
+    .footer__col-title {
+      font-size: 0.8125rem;
+      font-weight: var(--fw-semi);
+      color: rgba(255,255,255,.7);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .footer__links a {
+      color: rgba(255,255,255,.4);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color var(--t-fast);
+    }
+    .footer__links a:hover { color: #FFFFFF; }
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 2rem;
+    }
+    .footer__copy {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,.3);
+    }
+    .footer__legal {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer__legal a {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,.35);
+      text-decoration: none;
+      transition: color var(--t-fast);
+    }
+    .footer__legal a:hover { color: rgba(255,255,255,.7); }
+
+    /* ============================================================
+       PRICING PAGE
+    ============================================================ */
+    .pricing-hero {
+      padding: 10rem 0 5rem;
+      background: var(--c-bg);
+      text-align: center;
+    }
+    .pricing-toggle {
+      display: inline-flex;
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-pill);
+      padding: 4px;
+      gap: 4px;
+      margin: 2rem auto;
+    }
+    .pricing-toggle__btn {
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--r-pill);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--c-text-2);
+      font-family: var(--font);
+      transition: all var(--t-base);
+    }
+    .pricing-toggle__btn.active {
+      background: var(--c-text);
+      color: #FFFFFF;
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: var(--c-accent);
+      color: #FFF;
+      font-size: 0.6875rem;
+      font-weight: var(--fw-bold);
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--r-pill);
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+    .pricing-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-xl);
+      padding: 2.5rem;
+      position: relative;
+      transition: all var(--t-base);
+    }
+    .pricing-card:hover { box-shadow: var(--sh-lg); transform: translateY(-4px); }
+    .pricing-card--featured {
+      background: var(--c-bg-dark);
+      border-color: var(--c-accent);
+      color: var(--c-text-inv);
+    }
+    .pricing-card--featured:hover { box-shadow: 0 16px 64px rgba(201,149,108,.25); }
+    .pricing-card__badge {
+      position: absolute;
+      top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--c-accent);
+      color: #FFF;
+      font-size: 0.6875rem;
+      font-weight: var(--fw-black);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: var(--r-pill);
+      white-space: nowrap;
+    }
+    .pricing-card__name {
+      font-size: 0.8125rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-text-2);
+      margin-bottom: 1rem;
+    }
+    .pricing-card--featured .pricing-card__name { color: rgba(255,255,255,.5); }
+    .pricing-card__price {
+      font-size: 3rem;
+      font-weight: var(--fw-black);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-card--featured .pricing-card__price { color: #FFFFFF; }
+    .pricing-card__period {
+      font-size: 0.875rem;
+      color: var(--c-text-2);
+      margin-bottom: 1.75rem;
+    }
+    .pricing-card--featured .pricing-card__period { color: rgba(255,255,255,.45); }
+    .pricing-card__desc {
+      font-size: 0.875rem;
+      color: var(--c-text-2);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .pricing-card--featured .pricing-card__desc {
+      color: rgba(255,255,255,.45);
+      border-bottom-color: rgba(255,255,255,.08);
+    }
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    .pricing-features li {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--c-text);
+      line-height: 1.45;
+    }
+    .pricing-card--featured .pricing-features li { color: rgba(255,255,255,.75); }
+    .pricing-features li::before {
+      content: '✓';
+      width: 18px; height: 18px;
+      min-width: 18px;
+      background: rgba(201,149,108,.15);
+      color: var(--c-accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem;
+      font-weight: var(--fw-black);
+      margin-top: 1px;
+    }
+
+    /* B2B pricing section */
+    .b2b-pricing {
+      padding: var(--sp-xl) 0;
+      background: var(--c-bg-dark);
+    }
+    .b2b-pricing .headline { color: #FFFFFF; }
+    .b2b-pricing .label { color: var(--c-accent); }
+    .b2b-pricing .body-lg { color: rgba(255,255,255,.5); }
+    .b2b-tiers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .b2b-tier {
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r-xl);
+      padding: 2.5rem;
+      color: rgba(255,255,255,.75);
+    }
+    .b2b-tier__icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .b2b-tier__name {
+      font-size: 1.125rem;
+      font-weight: var(--fw-bold);
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+    }
+    .b2b-tier__desc {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,.45);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .b2b-tier__price {
+      font-size: 1.5rem;
+      font-weight: var(--fw-black);
+      color: var(--c-accent);
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.03em;
+    }
+    .b2b-tier__price-note {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,.3);
+      margin-bottom: 1.75rem;
+    }
+    .b2b-tier ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+    }
+    .b2b-tier ul li {
+      display: flex;
+      gap: 0.625rem;
+      line-height: 1.5;
+    }
+    .b2b-tier ul li::before {
+      content: '→';
+      color: var(--c-accent);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       CONTACT PAGE
+    ============================================================ */
+    .contact-hero {
+      padding: 10rem 0 5rem;
+      background: var(--c-bg);
+      text-align: center;
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 5rem;
+      padding-bottom: var(--sp-xl);
+    }
+    .contact-info__item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .contact-info__icon {
+      width: 44px; height: 44px;
+      background: var(--c-accent-2);
+      border-radius: var(--r-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.125rem;
+      flex-shrink: 0;
+    }
+    .contact-info__label {
+      font-size: 0.75rem;
+      font-weight: var(--fw-semi);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-text-2);
+      margin-bottom: 0.25rem;
+    }
+    .contact-info__value {
+      font-size: 0.9375rem;
+      font-weight: var(--fw-medium);
+      color: var(--c-text);
+    }
+    .contact-form {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-xl);
+      padding: 2.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      color: var(--c-text);
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: var(--c-bg);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-md);
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      color: var(--c-text);
+      transition: border-color var(--t-fast), box-shadow var(--t-fast);
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--c-accent);
+      box-shadow: 0 0 0 3px rgba(201,149,108,.12);
+    }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .form-success.show { display: block; }
+    .form-success__icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    /* ============================================================
+       LEGAL PAGES (Terms + Privacy)
+    ============================================================ */
+    .legal-page {
+      padding: 9rem 0 var(--sp-xl);
+      background: var(--c-bg);
+    }
+    .legal-content {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .legal-content h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: var(--fw-black);
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+    }
+    .legal-content .last-updated {
+      font-size: 0.875rem;
+      color: var(--c-text-2);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .legal-content h2 {
+      font-size: 1.25rem;
+      font-weight: var(--fw-bold);
+      letter-spacing: -0.015em;
+      margin: 2.5rem 0 0.875rem;
+    }
+    .legal-content p, .legal-content li {
+      font-size: 0.9375rem;
+      color: var(--c-text-2);
+      line-height: 1.8;
+      margin-bottom: 0.875rem;
+    }
+    .legal-content ul { padding-left: 1.5rem; }
+    .legal-content a { color: var(--c-accent); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .steps-grid { grid-template-columns: repeat(3, 1fr); }
+      .providers-grid { grid-template-columns: repeat(3, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer__top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .hero__grid { grid-template-columns: 1fr; }
+      .hero__visual { display: none; }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .providers-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .b2b__inner { grid-template-columns: 1fr; gap: 3rem; }
+      .b2b__visual { order: -1; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .b2b-tiers { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer__top { grid-template-columns: 1fr; gap: 2rem; }
+      .nav__links, .nav__cta { display: none; }
+      .nav__hamburger { display: flex; }
+    }
+
+    @media (max-width: 480px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .providers-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero__stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       NAVIGATION
+  ========================================================= -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="#" class="nav__logo" onclick="navigate('home')" aria-label="Fentsi home">
+          fentsi<span class="nav__logo-dot"></span>
+        </a>
+        <ul class="nav__links" role="list">
+          <li><a href="#" onclick="navigate('home')" id="nav-home">Home</a></li>
+          <li><a href="#" onclick="scrollToSection('how')">How it works</a></li>
+          <li><a href="#" onclick="scrollToSection('providers')">Vendors</a></li>
+          <li><a href="#" onclick="navigate('pricing')" id="nav-pricing">Pricing</a></li>
+          <li><a href="#" onclick="navigate('contact')" id="nav-contact">Contact</a></li>
+        </ul>
+        <div class="nav__cta">
+          <a href="#" class="btn btn--ghost btn--sm" onclick="navigate('pricing')">See plans</a>
+          <a href="#" class="btn btn--accent btn--sm" onclick="scrollToSection('start')">Start free</a>
+        </div>
+        <button class="nav__hamburger" onclick="toggleMobileNav()" aria-label="Open menu" id="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile nav -->
+  <div class="nav__mobile" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <button class="nav__mobile-close" onclick="toggleMobileNav()" aria-label="Close menu">✕</button>
+    <a href="#" onclick="navigate('home'); toggleMobileNav()">Home</a>
+    <a href="#" onclick="navigate('home'); setTimeout(()=>scrollToSection('how'),100); toggleMobileNav()">How it works</a>
+    <a href="#" onclick="navigate('home'); setTimeout(()=>scrollToSection('providers'),100); toggleMobileNav()">Vendors</a>
+    <a href="#" onclick="navigate('pricing'); toggleMobileNav()">Pricing</a>
+    <a href="#" onclick="navigate('contact'); toggleMobileNav()">Contact</a>
+    <a href="#" class="btn btn--accent" onclick="navigate('home'); toggleMobileNav()" style="margin-top:1rem">Start free →</a>
+  </div>
+
+  <!-- =========================================================
+       HOME PAGE
+  ========================================================= -->
+  <main id="page-home" class="page active">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__content">
+            <div class="hero__eyebrow reveal">AI Event Planning</div>
+            <h1 class="hero__title reveal reveal-delay-1">
+              Your perfect<br>event, <em>planned<br>by AI</em>
+            </h1>
+            <p class="hero__sub reveal reveal-delay-2">
+              Answer 10 questions. Get a complete event plan, an optimized budget, and curated vendor matches — covering everything from venue to flowers, catering to photography.
+            </p>
+            <div class="hero__actions reveal reveal-delay-3">
+              <a href="#" class="btn btn--accent btn--lg" onclick="scrollToSection('start')">
+                Plan my event →
+              </a>
+              <a href="#" class="btn btn--ghost-inv btn--lg" onclick="scrollToSection('how')">
+                See how it works
+              </a>
+            </div>
+            <div class="hero__stats reveal reveal-delay-4">
+              <div>
+                <div class="hero__stat-num">10</div>
+                <div class="hero__stat-label">Steps to your plan</div>
+              </div>
+              <div>
+                <div class="hero__stat-num">200+</div>
+                <div class="hero__stat-label">Curated vendors</div>
+              </div>
+              <div>
+                <div class="hero__stat-num">100%</div>
+                <div class="hero__stat-label">Personalized</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gamified card -->
+          <div class="hero__visual reveal reveal-delay-2">
+            <div class="hero__card">
+              <div class="hero__card-step">Step 3 of 10</div>
+              <div class="hero__card-q">What's your event style?</div>
+              <div class="hero__card-options">
+                <div class="hero__card-opt selected" onclick="selectOpt(this)">
+                  <div class="hero__card-opt-icon">🌿</div>
+                  Rustic &amp; Natural
+                </div>
+                <div class="hero__card-opt" onclick="selectOpt(this)">
+                  <div class="hero__card-opt-icon">✨</div>
+                  Elegant &amp; Luxury
+                </div>
+                <div class="hero__card-opt" onclick="selectOpt(this)">
+                  <div class="hero__card-opt-icon">🎨</div>
+                  Modern &amp; Creative
+                </div>
+                <div class="hero__card-opt" onclick="selectOpt(this)">
+                  <div class="hero__card-opt-icon">🌊</div>
+                  Bohemian &amp; Free
+                </div>
+              </div>
+              <div class="hero__card-progress">
+                <div class="hero__card-pip done"></div>
+                <div class="hero__card-pip done"></div>
+                <div class="hero__card-pip active"></div>
+                <div class="hero__card-pip"></div>
+                <div class="hero__card-pip"></div>
+                <div class="hero__card-pip"></div>
+                <div class="hero__card-pip"></div>
+                <div class="hero__card-pip"></div>
+                <div class="hero__card-pip"></div>
+                <div class="hero__card-pip"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <div class="trust" aria-label="Trust signals">
+      <div class="container">
+        <div class="trust__inner">
+          <div class="trust__item">
+            <svg class="trust__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secure &amp; Private
+          </div>
+          <div class="trust__item">
+            <svg class="trust__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Plan ready in minutes
+          </div>
+          <div class="trust__item">
+            <svg class="trust__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            200+ Verified vendors
+          </div>
+          <div class="trust__item">
+            <svg class="trust__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Budget optimizer built-in
+          </div>
+          <div class="trust__item">
+            <svg class="trust__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Free to get started
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="label reveal">How Fentsi works</span>
+          <h2 class="headline reveal reveal-delay-1" id="how-title">10 steps to your<br>perfect event plan</h2>
+          <p class="body-lg reveal reveal-delay-2">Fentsi turns event planning into a guided experience — no spreadsheets, no phone tag, no wasted hours.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <div class="step-card__num">01</div>
+            <span class="step-card__icon">🎉</span>
+            <div class="step-card__title">Event Type</div>
+            <div class="step-card__desc">Wedding, birthday, corporate, or private party — we adapt the entire plan.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-1">
+            <div class="step-card__num">02</div>
+            <span class="step-card__icon">👥</span>
+            <div class="step-card__title">Guest Count</div>
+            <div class="step-card__desc">From intimate gatherings of 10 to grand celebrations of 500+.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-2">
+            <div class="step-card__num">03</div>
+            <span class="step-card__icon">✨</span>
+            <div class="step-card__title">Style &amp; Mood</div>
+            <div class="step-card__desc">Rustic, luxury, boho, modern — your aesthetic shapes every vendor choice.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-3">
+            <div class="step-card__num">04</div>
+            <span class="step-card__icon">📍</span>
+            <div class="step-card__title">Location</div>
+            <div class="step-card__desc">City, region, or specific venue type. Fentsi filters vendors by proximity.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-4">
+            <div class="step-card__num">05</div>
+            <span class="step-card__icon">💰</span>
+            <div class="step-card__title">Total Budget</div>
+            <div class="step-card__desc">Set your ceiling. Fentsi optimizes allocation across every category.</div>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-card__num">06</div>
+            <span class="step-card__icon">⭐</span>
+            <div class="step-card__title">Priorities</div>
+            <div class="step-card__desc">Photography matters most? Catering is non-negotiable? You decide.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-1">
+            <div class="step-card__num">07</div>
+            <span class="step-card__icon">🍽️</span>
+            <div class="step-card__title">Food &amp; Drinks</div>
+            <div class="step-card__desc">Sit-down dinner, cocktail party, or food stations — your call.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-2">
+            <div class="step-card__num">08</div>
+            <span class="step-card__icon">🎵</span>
+            <div class="step-card__title">Entertainment</div>
+            <div class="step-card__desc">Live band, DJ, string quartet — we match you with the right artists.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-3">
+            <div class="step-card__num">09</div>
+            <span class="step-card__icon">📅</span>
+            <div class="step-card__title">Date &amp; Timeline</div>
+            <div class="step-card__desc">Your date unlocks vendor availability and seasonal pricing intelligence.</div>
+          </div>
+          <div class="step-card reveal reveal-delay-4">
+            <div class="step-card__num">10</div>
+            <span class="step-card__icon">🤝</span>
+            <div class="step-card__title">Special Needs</div>
+            <div class="step-card__desc">Accessibility, dietary restrictions, cultural traditions — nothing is overlooked.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="label reveal">What you get</span>
+          <h2 class="headline reveal reveal-delay-1" id="features-title">Everything in one plan</h2>
+          <p class="body-lg reveal reveal-delay-2">Fentsi doesn't just suggest — it builds a complete, actionable event plan you can start executing immediately.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-cell reveal">
+            <span class="feature-cell__icon">🗺️</span>
+            <div class="feature-cell__title">Complete Event Plan</div>
+            <div class="feature-cell__desc">A structured, downloadable plan covering every phase — from venue booking to day-of timeline.</div>
+          </div>
+          <div class="feature-cell reveal reveal-delay-1">
+            <span class="feature-cell__icon">💎</span>
+            <div class="feature-cell__desc">AI matches your style, budget, and guest count to the most compatible vendors in your area.</div>
+            <div class="feature-cell__title">Smart Vendor Matching</div>
+          </div>
+          <div class="feature-cell reveal reveal-delay-2">
+            <span class="feature-cell__icon">📊</span>
+            <div class="feature-cell__title">Budget Optimizer</div>
+            <div class="feature-cell__desc">Intelligently distributes your budget across categories, maximizing impact where it matters to you.</div>
+          </div>
+          <div class="feature-cell reveal reveal-delay-3">
+            <span class="feature-cell__icon">🔔</span>
+            <div class="feature-cell__title">Task & Deadline Manager</div>
+            <div class="feature-cell__desc">Auto-generated checklist with smart deadlines. Never miss a booking window or deposit deadline.</div>
+          </div>
+          <div class="feature-cell reveal reveal-delay-4">
+            <span class="feature-cell__icon">💬</span>
+            <div class="feature-cell__title">Vendor Communication Hub</div>
+            <div class="feature-cell__desc">All quotes, messages, and contracts in one place. No more scattered WhatsApp threads.</div>
+          </div>
+          <div class="feature-cell reveal">
+            <span class="feature-cell__icon">📈</span>
+            <div class="feature-cell__title">Real-Time Insights</div>
+            <div class="feature-cell__desc">Track spending vs. budget live. Get AI-powered suggestions when costs drift off plan.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVIDERS -->
+    <section class="providers" id="providers" aria-labelledby="providers-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="label reveal">Every detail covered</span>
+          <h2 class="headline reveal reveal-delay-1" id="providers-title">200+ vendor categories,<br>zero compromises</h2>
+          <p class="body-lg reveal reveal-delay-2">From balloons to Michelin-star catering, Fentsi covers every element of your event — sourcing the best providers in each category.</p>
+        </div>
+        <div class="providers-grid">
+          <div class="provider-card reveal">
+            <span class="provider-card__icon">🏛️</span>
+            <div class="provider-card__name">Venues</div>
+            <div class="provider-card__desc">Villas, castles, gardens, industrial lofts</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-1">
+            <span class="provider-card__icon">📸</span>
+            <div class="provider-card__name">Photography</div>
+            <div class="provider-card__desc">Editorial, reportage, fine-art photographers</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-2">
+            <span class="provider-card__icon">🎬</span>
+            <div class="provider-card__name">Videography</div>
+            <div class="provider-card__desc">Cinematic films, same-day edits, drones</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-3">
+            <span class="provider-card__icon">🍽️</span>
+            <div class="provider-card__name">Catering</div>
+            <div class="provider-card__desc">From street food to haute cuisine</div>
+          </div>
+          <div class="provider-card reveal">
+            <span class="provider-card__icon">🎵</span>
+            <div class="provider-card__name">Music & DJ</div>
+            <div class="provider-card__desc">Live bands, DJs, orchestras, quartets</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-1">
+            <span class="provider-card__icon">💐</span>
+            <div class="provider-card__name">Flowers & Decor</div>
+            <div class="provider-card__desc">Floral design, tablescape, lighting</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-2">
+            <span class="provider-card__icon">🎂</span>
+            <div class="provider-card__name">Cakes & Desserts</div>
+            <div class="provider-card__desc">Wedding cakes, dessert tables, candy bars</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-3">
+            <span class="provider-card__icon">🪄</span>
+            <div class="provider-card__name">Entertainment</div>
+            <div class="provider-card__desc">Photo booths, magicians, fire shows</div>
+          </div>
+          <div class="provider-card reveal">
+            <span class="provider-card__icon">💄</span>
+            <div class="provider-card__name">Hair & Makeup</div>
+            <div class="provider-card__desc">Bridal beauty, trials, on-location teams</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-1">
+            <span class="provider-card__icon">🚌</span>
+            <div class="provider-card__name">Transport</div>
+            <div class="provider-card__desc">Vintage cars, shuttles, luxury coaches</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-2">
+            <span class="provider-card__icon">🎈</span>
+            <div class="provider-card__name">Balloons & More</div>
+            <div class="provider-card__desc">Installations, balloon arches, neon signs</div>
+          </div>
+          <div class="provider-card reveal reveal-delay-3">
+            <span class="provider-card__icon">🤵</span>
+            <div class="provider-card__name">Event Planners</div>
+            <div class="provider-card__desc">Professional coordinators & day-of planners</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="social-proof" aria-labelledby="testimonials-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="label reveal">Real stories</span>
+          <h2 class="headline reveal reveal-delay-1" id="testimonials-title">Loved by couples<br>&amp; planners</h2>
+        </div>
+        <div class="testimonials-grid">
+          <div class="testimonial reveal">
+            <div class="testimonial__stars">★★★★★</div>
+            <p class="testimonial__text">"In 15 minutes Fentsi gave us a complete wedding plan with budget breakdown and vendor list. Our planner said it was the most organized brief she'd ever received."</p>
+            <div class="testimonial__author">
+              <div class="testimonial__avatar">S</div>
+              <div>
+                <div class="testimonial__name">Sofia &amp; Marco</div>
+                <div class="testimonial__role">Wedding in Tuscany, 2025</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial reveal reveal-delay-1">
+            <div class="testimonial__stars">★★★★★</div>
+            <p class="testimonial__text">"As a wedding planner, I now use Fentsi for every new client. The discovery process is so smart — clients feel heard and I get structured briefs automatically."</p>
+            <div class="testimonial__author">
+              <div class="testimonial__avatar">L</div>
+              <div>
+                <div class="testimonial__name">Laura Benedetti</div>
+                <div class="testimonial__role">Wedding Planner, Milan</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial reveal reveal-delay-2">
+            <div class="testimonial__stars">★★★★★</div>
+            <p class="testimonial__text">"We saved €4,200 on our corporate event by following Fentsi's budget optimization. The vendor recommendations were spot on — every single one."</p>
+            <div class="testimonial__author">
+              <div class="testimonial__avatar">A</div>
+              <div>
+                <div class="testimonial__name">Andrea Martinelli</div>
+                <div class="testimonial__role">Events Manager, Rome</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- B2B SECTION -->
+    <section class="b2b" aria-labelledby="b2b-title">
+      <div class="container">
+        <div class="b2b__inner">
+          <div>
+            <span class="b2b__badge">For Professionals</span>
+            <h2 class="headline reveal" id="b2b-title">The platform<br>event pros trust</h2>
+            <p class="body-lg reveal reveal-delay-1" style="margin-top:1rem">Fentsi isn't just for couples. Wedding planners, venues, and agencies use Fentsi as their operational backbone — from client discovery to vendor coordination.</p>
+            <ul class="b2b__list reveal reveal-delay-2">
+              <li>Automate client discovery with AI-powered intake questionnaires</li>
+              <li>Manage multiple events and clients in one dashboard</li>
+              <li>Access preferred vendor networks and exclusive rates</li>
+              <li>Generate professional proposals and contracts instantly</li>
+              <li>Track budgets, timelines, and tasks across your entire portfolio</li>
+            </ul>
+            <a href="#" class="btn btn--primary reveal reveal-delay-3" onclick="navigate('pricing')">See B2B plans →</a>
+          </div>
+          <div class="b2b__visual reveal">
+            <div class="b2b__metric">
+              <div class="b2b__metric-val">3<span>x</span></div>
+              <div class="b2b__metric-label">Faster client onboarding</div>
+            </div>
+            <div class="b2b__metric">
+              <div class="b2b__metric-val">€<span>0</span></div>
+              <div class="b2b__metric-label">Setup cost</div>
+            </div>
+            <div class="b2b__metric">
+              <div class="b2b__metric-val">40<span>%</span></div>
+              <div class="b2b__metric-label">Less time on admin</div>
+            </div>
+            <div class="b2b__metric">
+              <div class="b2b__metric-val">200<span>+</span></div>
+              <div class="b2b__metric-label">Partner vendors</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="label reveal">FAQ</span>
+          <h2 class="headline reveal reveal-delay-1" id="faq-title">Common questions</h2>
+        </div>
+        <div class="faq__list" role="list">
+          <div class="faq__item" role="listitem">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              What exactly does Fentsi produce?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer">
+              <p>Fentsi generates a complete event plan including: a phase-by-phase timeline, a budget breakdown optimized for your priorities, a curated list of matched vendors with contact details, a task checklist with smart deadlines, and a sharable brief you can send directly to your planner or vendors.</p>
+            </div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              How does the vendor matching work?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer">
+              <p>Fentsi's AI matches vendors based on your event style, budget per category, location, date availability, and past performance ratings. We only propose vendors who have been verified and who operate in your area.</p>
+            </div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              Is my data safe?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer">
+              <p>Yes. Fentsi is GDPR-compliant. Your personal data is encrypted at rest and in transit, never sold to third parties, and you can delete your account and all associated data at any time.</p>
+            </div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              Can I use Fentsi if I'm a wedding planner?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer">
+              <p>Absolutely — Fentsi has dedicated B2B plans for wedding planners, agencies, and venues. You can manage multiple clients, build your own vendor network, generate proposals, and white-label the experience for your brand.</p>
+            </div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              How much does Fentsi cost?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer">
+              <p>Fentsi is free to start — you can complete the 10-step questionnaire and receive your event plan at no cost. Pro plans for advanced features start at €12/month. B2B plans for professionals start at €49/month. See our <a href="#" onclick="navigate('pricing')">pricing page</a> for full details.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="cta-banner" id="start" aria-labelledby="cta-title">
+      <div class="container container--narrow">
+        <h2 class="cta-banner__title reveal" id="cta-title">Plan your event<br>in <em>minutes</em></h2>
+        <p class="cta-banner__sub reveal reveal-delay-1">No spreadsheets. No phone calls. Just answer 10 questions and get your complete event plan — free.</p>
+        <div class="cta-banner__actions reveal reveal-delay-2">
+          <a href="#" class="btn btn--accent btn--lg">Start planning — it's free →</a>
+          <a href="#" class="btn btn--ghost-inv btn--lg" onclick="navigate('contact')">Talk to us</a>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /page-home -->
+
+  <!-- =========================================================
+       PRICING PAGE
+  ========================================================= -->
+  <main id="page-pricing" class="page">
+
+    <section class="pricing-hero">
+      <div class="container">
+        <span class="label reveal">Pricing</span>
+        <h1 class="headline reveal reveal-delay-1" style="margin-top:0.75rem">Simple, transparent pricing</h1>
+        <p class="body-lg reveal reveal-delay-2" style="margin-top:1rem;max-width:520px;margin-left:auto;margin-right:auto">Start free. Upgrade when you need more. No hidden fees, no surprise charges.</p>
+        <div class="pricing-toggle reveal reveal-delay-3">
+          <button class="pricing-toggle__btn active" id="toggle-monthly" onclick="setPricingPeriod('monthly')">Monthly</button>
+          <button class="pricing-toggle__btn" id="toggle-annual" onclick="setPricingPeriod('annual')">Annual <span class="pricing-badge">-20%</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:0 0 var(--sp-xl); background:var(--c-bg);">
+      <div class="container">
+        <div class="pricing-grid">
+
+          <!-- Free -->
+          <div class="pricing-card reveal">
+            <div class="pricing-card__name">Starter</div>
+            <div class="pricing-card__price">€0</div>
+            <div class="pricing-card__period">Forever free</div>
+            <div class="pricing-card__desc">Perfect for couples planning a single event who want a great starting point.</div>
+            <ul class="pricing-features">
+              <li>1 event plan</li>
+              <li>AI-powered 10-step questionnaire</li>
+              <li>Complete event plan &amp; budget breakdown</li>
+              <li>Up to 5 vendor suggestions per category</li>
+              <li>Downloadable PDF plan</li>
+              <li>Basic task checklist</li>
+            </ul>
+            <a href="#" class="btn btn--ghost" style="width:100%;justify-content:center">Get started free</a>
+          </div>
+
+          <!-- Pro -->
+          <div class="pricing-card pricing-card--featured reveal reveal-delay-1">
+            <div class="pricing-card__badge">Most Popular</div>
+            <div class="pricing-card__name">Pro</div>
+            <div class="pricing-card__price" id="pro-price">€12</div>
+            <div class="pricing-card__period" id="pro-period">per month</div>
+            <div class="pricing-card__desc">For couples who want to manage everything in one place and get priority vendor access.</div>
+            <ul class="pricing-features">
+              <li>Unlimited event plans</li>
+              <li>Priority vendor matching</li>
+              <li>Direct vendor messaging &amp; quote requests</li>
+              <li>Smart deadline reminders</li>
+              <li>Budget tracking dashboard</li>
+              <li>Contract &amp; document storage</li>
+              <li>Shareable event brief for planners</li>
+              <li>Mobile app access</li>
+            </ul>
+            <a href="#" class="btn btn--accent" style="width:100%;justify-content:center">Start Pro free for 14 days →</a>
+          </div>
+
+          <!-- Planner -->
+          <div class="pricing-card reveal reveal-delay-2">
+            <div class="pricing-card__name">Planner</div>
+            <div class="pricing-card__price" id="planner-price">€49</div>
+            <div class="pricing-card__period" id="planner-period">per month</div>
+            <div class="pricing-card__desc">For professional wedding planners, agencies, and venues managing multiple clients.</div>
+            <ul class="pricing-features">
+              <li>Everything in Pro</li>
+              <li>Up to 20 active client events</li>
+              <li>Client portal &amp; white-label briefs</li>
+              <li>Custom vendor network</li>
+              <li>Advanced analytics &amp; reporting</li>
+              <li>Team collaboration (3 seats)</li>
+              <li>Priority support</li>
+              <li>API access (beta)</li>
+            </ul>
+            <a href="#" class="btn btn--primary" style="width:100%;justify-content:center" onclick="navigate('contact')">Contact sales →</a>
+          </div>
+
+        </div>
+
+        <!-- Comparison note -->
+        <p style="text-align:center;margin-top:2.5rem;font-size:0.875rem;color:var(--c-text-2)">
+          All plans include SSL encryption, GDPR compliance, and data export. Need something custom? <a href="#" onclick="navigate('contact')" style="color:var(--c-accent)">Talk to us →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- B2B PRICING -->
+    <section class="b2b-pricing" aria-labelledby="b2b-pricing-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="label reveal">For the industry</span>
+          <h2 class="headline reveal reveal-delay-1" id="b2b-pricing-title">Built for event professionals</h2>
+          <p class="body-lg reveal reveal-delay-2">Whether you're a solo planner, a boutique agency, or a venue with 50 events per year — Fentsi scales with your business.</p>
+        </div>
+        <div class="b2b-tiers">
+          <div class="b2b-tier reveal">
+            <span class="b2b-tier__icon">🤵</span>
+            <div class="b2b-tier__name">Solo Planner</div>
+            <div class="b2b-tier__desc">Ideal for independent wedding planners managing up to 20 events/year.</div>
+            <div class="b2b-tier__price">€49/mo</div>
+            <div class="b2b-tier__price-note">or €470/year (save 20%)</div>
+            <ul>
+              <li>Up to 20 active client events</li>
+              <li>AI intake forms for every client</li>
+              <li>Branded proposal generator</li>
+              <li>Vendor network management</li>
+              <li>Commission tracking</li>
+            </ul>
+          </div>
+          <div class="b2b-tier reveal reveal-delay-1">
+            <span class="b2b-tier__icon">🏢</span>
+            <div class="b2b-tier__name">Agency</div>
+            <div class="b2b-tier__desc">For boutique agencies with a team managing 20–100 events/year.</div>
+            <div class="b2b-tier__price">€149/mo</div>
+            <div class="b2b-tier__price-note">or €1,430/year (save 20%)</div>
+            <ul>
+              <li>Unlimited active events</li>
+              <li>Up to 10 team seats</li>
+              <li>White-label client portal</li>
+              <li>Advanced analytics dashboard</li>
+              <li>Priority vendor access &amp; rates</li>
+              <li>Dedicated account manager</li>
+            </ul>
+          </div>
+          <div class="b2b-tier reveal reveal-delay-2">
+            <span class="b2b-tier__icon">🏛️</span>
+            <div class="b2b-tier__name">Venue Partner</div>
+            <div class="b2b-tier__desc">For venues that want to be recommended to Fentsi users and manage bookings in-platform.</div>
+            <div class="b2b-tier__price">Custom</div>
+            <div class="b2b-tier__price-note">Revenue-share + flat fee options</div>
+            <ul>
+              <li>Featured placement in search results</li>
+              <li>Booking management integration</li>
+              <li>Direct lead generation from couples</li>
+              <li>Co-marketing opportunities</li>
+              <li>Performance analytics</li>
+            </ul>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:3rem">
+          <a href="#" class="btn btn--accent btn--lg reveal" onclick="navigate('contact')">Request a demo →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ on pricing -->
+    <section class="faq" style="padding-top:var(--sp-lg)">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="headline reveal">Pricing questions</h2>
+        </div>
+        <div class="faq__list">
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              Can I cancel my subscription anytime?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer"><p>Yes. Cancel at any time from your account settings. You'll keep access until the end of your billing period with no fees or penalties.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              Is there a free trial?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer"><p>Pro plans come with a 14-day free trial, no credit card required. B2B plans include a 30-day trial or personalized demo.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              Does Fentsi take a commission from vendors?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer"><p>Fentsi operates on a hybrid model: subscription fees plus a small referral commission when a booking is confirmed through the platform. This is transparently disclosed to all parties.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /page-pricing -->
+
+  <!-- =========================================================
+       CONTACT PAGE
+  ========================================================= -->
+  <main id="page-contact" class="page">
+
+    <section class="contact-hero">
+      <div class="container">
+        <span class="label reveal">Get in touch</span>
+        <h1 class="headline reveal reveal-delay-1" style="margin-top:0.75rem">We'd love to hear<br>from you</h1>
+        <p class="body-lg reveal reveal-delay-2" style="margin-top:1rem;max-width:480px;margin-left:auto;margin-right:auto">Whether you're planning an event, joining as a vendor, or exploring our B2B platform — reach out and we'll respond within 24 hours.</p>
+      </div>
+    </section>
+
+    <section style="background:var(--c-bg);padding-bottom:var(--sp-xl)">
+      <div class="container">
+        <div class="contact-layout">
+
+          <div class="contact-info">
+            <div class="contact-info__item reveal">
+              <div class="contact-info__icon">✉️</div>
+              <div>
+                <div class="contact-info__label">Email</div>
+                <div class="contact-info__value"><a href="mailto:hello@fentsi.com" style="color:var(--c-text);text-decoration:none">hello@fentsi.com</a></div>
+              </div>
+            </div>
+            <div class="contact-info__item reveal reveal-delay-1">
+              <div class="contact-info__icon">💼</div>
+              <div>
+                <div class="contact-info__label">B2B & Partnerships</div>
+                <div class="contact-info__value"><a href="mailto:partners@fentsi.com" style="color:var(--c-text);text-decoration:none">partners@fentsi.com</a></div>
+              </div>
+            </div>
+            <div class="contact-info__item reveal reveal-delay-2">
+              <div class="contact-info__icon">🗓️</div>
+              <div>
+                <div class="contact-info__label">Response time</div>
+                <div class="contact-info__value">Within 24 hours</div>
+              </div>
+            </div>
+            <div class="contact-info__item reveal reveal-delay-3">
+              <div class="contact-info__icon">📍</div>
+              <div>
+                <div class="contact-info__label">Based in</div>
+                <div class="contact-info__value">Italy 🇮🇹 — serving Europe</div>
+              </div>
+            </div>
+            <div style="margin-top:2rem" class="reveal reveal-delay-4">
+              <div class="contact-info__label" style="margin-bottom:1rem">Follow us</div>
+              <div style="display:flex;gap:0.75rem">
+                <a href="#" class="btn btn--ghost btn--sm">Instagram</a>
+                <a href="#" class="btn btn--ghost btn--sm">LinkedIn</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form reveal reveal-delay-1" id="contactFormWrap">
+            <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:1.75rem;letter-spacing:-0.01em">Send us a message</h2>
+            <form onsubmit="submitContactForm(event)" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="cf-name">First name</label>
+                  <input type="text" id="cf-name" placeholder="Sofia" required />
+                </div>
+                <div class="form-group">
+                  <label for="cf-lname">Last name</label>
+                  <input type="text" id="cf-lname" placeholder="Rossi" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cf-email">Email address</label>
+                <input type="email" id="cf-email" placeholder="sofia@example.com" required />
+              </div>
+              <div class="form-group">
+                <label for="cf-type">I am a…</label>
+                <select id="cf-type">
+                  <option value="">Select one</option>
+                  <option>Couple planning an event</option>
+                  <option>Wedding / event planner</option>
+                  <option>Vendor or venue</option>
+                  <option>Investor or partner</option>
+                  <option>Press or media</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cf-message">Message</label>
+                <textarea id="cf-message" placeholder="Tell us how we can help…" required></textarea>
+              </div>
+              <button type="submit" class="btn btn--accent" style="width:100%;justify-content:center">Send message →</button>
+            </form>
+            <div class="form-success" id="formSuccess">
+              <div class="form-success__icon">🎉</div>
+              <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem">Message sent!</h3>
+              <p style="color:var(--c-text-2);font-size:0.9375rem">We'll get back to you within 24 hours.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ on contact -->
+    <section class="faq" style="padding-top:var(--sp-lg)">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="headline reveal">Quick answers</h2>
+        </div>
+        <div class="faq__list">
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              How do I list my business on Fentsi?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer"><p>Reach out via the form above or email us at partners@fentsi.com. We'll walk you through the onboarding process and help you set up your vendor profile.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__question" onclick="toggleFaq(this)" aria-expanded="false">
+              Can I request a demo of the B2B platform?
+              <svg class="faq__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq__answer"><p>Absolutely. Select "Wedding / event planner" or "Vendor or venue" in the contact form above and we'll schedule a 30-minute demo tailored to your business.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /page-contact -->
+
+  <!-- =========================================================
+       TERMS OF SERVICE
+  ========================================================= -->
+  <main id="page-terms" class="page">
+    <div class="legal-page">
+      <div class="container">
+        <div class="legal-content">
+          <h1>Terms of Service</h1>
+          <p class="last-updated">Last updated: March 2026</p>
+
+          <p>Welcome to Fentsi. By accessing or using our platform at fentsi.com (the "Service"), you agree to be bound by these Terms of Service ("Terms"). Please read them carefully.</p>
+
+          <h2>1. Who we are</h2>
+          <p>Fentsi is an AI-powered event planning platform operated by Fentsi S.r.l., a company incorporated in Italy. References to "Fentsi," "we," "us," or "our" refer to this entity.</p>
+
+          <h2>2. Eligibility</h2>
+          <p>You must be at least 18 years old to use the Service. By agreeing to these Terms, you represent that you are of legal age and have the capacity to enter into a binding agreement.</p>
+
+          <h2>3. Account registration</h2>
+          <p>To access certain features, you must create an account. You agree to:</p>
+          <ul>
+            <li>Provide accurate and complete information</li>
+            <li>Maintain the security of your password</li>
+            <li>Promptly update any information that becomes inaccurate</li>
+            <li>Accept responsibility for all activity under your account</li>
+          </ul>
+
+          <h2>4. Acceptable use</h2>
+          <p>You agree not to use the Service to:</p>
+          <ul>
+            <li>Violate any applicable law or regulation</li>
+            <li>Transmit any unauthorized advertising, spam, or promotional material</li>
+            <li>Impersonate any person or entity</li>
+            <li>Interfere with or disrupt the integrity or performance of the Service</li>
+            <li>Collect or harvest any personal data without consent</li>
+          </ul>
+
+          <h2>5. Vendor relationships</h2>
+          <p>Fentsi acts as an intermediary platform connecting users with third-party vendors. We do not provide event services directly. Any contracts, agreements, or disputes between users and vendors are the sole responsibility of the parties involved. Fentsi is not liable for the quality, safety, or legality of vendor services.</p>
+
+          <h2>6. AI-generated content</h2>
+          <p>Fentsi uses artificial intelligence to generate event plans, budget recommendations, and vendor suggestions. These are provided for informational purposes only. They do not constitute professional financial, legal, or event planning advice. Always verify vendor details and pricing independently before entering into any commitment.</p>
+
+          <h2>7. Fees and payments</h2>
+          <p>Certain features of the Service require a paid subscription. Fees are charged in advance on a monthly or annual basis. All fees are non-refundable except as required by applicable law. We reserve the right to change pricing with 30 days' notice.</p>
+
+          <h2>8. Intellectual property</h2>
+          <p>The Service and its original content, features, and functionality are owned by Fentsi and are protected by copyright, trademark, and other intellectual property laws. You may not copy, reproduce, or distribute any part of the Service without our prior written consent.</p>
+
+          <h2>9. Limitation of liability</h2>
+          <p>To the maximum extent permitted by law, Fentsi shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, resulting from your use of or inability to use the Service.</p>
+
+          <h2>10. Termination</h2>
+          <p>We reserve the right to terminate or suspend your account at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, vendors, third parties, or the Service itself.</p>
+
+          <h2>11. Governing law</h2>
+          <p>These Terms shall be governed by and construed in accordance with the laws of Italy. Any dispute arising under these Terms shall be subject to the exclusive jurisdiction of the courts of Italy.</p>
+
+          <h2>12. Changes to these Terms</h2>
+          <p>We may update these Terms from time to time. We will notify you of any material changes by posting the new Terms on this page and updating the "Last updated" date. Your continued use of the Service after changes constitutes acceptance of the new Terms.</p>
+
+          <h2>13. Contact</h2>
+          <p>For questions about these Terms, please contact us at <a href="mailto:legal@fentsi.com">legal@fentsi.com</a>.</p>
+        </div>
+      </div>
+    </div>
+  </main><!-- /page-terms -->
+
+  <!-- =========================================================
+       PRIVACY POLICY
+  ========================================================= -->
+  <main id="page-privacy" class="page">
+    <div class="legal-page">
+      <div class="container">
+        <div class="legal-content">
+          <h1>Privacy Policy</h1>
+          <p class="last-updated">Last updated: March 2026 · GDPR compliant</p>
+
+          <p>Fentsi ("we", "us", "our") is committed to protecting your personal data. This Privacy Policy explains how we collect, use, share, and safeguard your information when you use fentsi.com and our related services.</p>
+
+          <h2>1. Data controller</h2>
+          <p>Fentsi S.r.l., Italy — <a href="mailto:privacy@fentsi.com">privacy@fentsi.com</a></p>
+
+          <h2>2. What data we collect</h2>
+          <p>We collect the following categories of personal data:</p>
+          <ul>
+            <li><strong>Account data:</strong> Name, email address, password (hashed)</li>
+            <li><strong>Event data:</strong> Your answers to the planning questionnaire, preferences, budget, event details</li>
+            <li><strong>Communication data:</strong> Messages sent through the platform</li>
+            <li><strong>Usage data:</strong> Pages visited, features used, device type, browser, IP address</li>
+            <li><strong>Payment data:</strong> Billing details processed securely via our payment provider (we do not store card numbers)</li>
+          </ul>
+
+          <h2>3. How we use your data</h2>
+          <ul>
+            <li>To provide, maintain, and improve the Service</li>
+            <li>To generate your personalized event plan</li>
+            <li>To match you with relevant vendors</li>
+            <li>To send service-related communications (e.g. confirmations, reminders)</li>
+            <li>To send marketing communications (with your consent — you can opt out at any time)</li>
+            <li>To comply with legal obligations</li>
+          </ul>
+
+          <h2>4. Legal basis for processing</h2>
+          <p>We process your data on the following legal bases under GDPR: performance of a contract (to provide the Service), legitimate interests (to improve and market the Service), consent (for marketing emails and non-essential cookies), and legal obligation (for compliance purposes).</p>
+
+          <h2>5. Data sharing</h2>
+          <p>We do not sell your personal data. We may share data with:</p>
+          <ul>
+            <li>Verified vendors you choose to contact through the platform (only the information necessary to facilitate the connection)</li>
+            <li>Service providers (cloud hosting, payment processors, analytics) under strict data processing agreements</li>
+            <li>Law enforcement or regulatory authorities when required by law</li>
+          </ul>
+
+          <h2>6. Data retention</h2>
+          <p>We retain your personal data for as long as your account is active or as needed to provide the Service. You may delete your account at any time, after which your personal data will be permanently deleted within 30 days, except where we are required by law to retain it.</p>
+
+          <h2>7. Your rights (GDPR)</h2>
+          <p>As a data subject in the EU, you have the right to:</p>
+          <ul>
+            <li>Access your personal data</li>
+            <li>Rectify inaccurate data</li>
+            <li>Request erasure ("right to be forgotten")</li>
+            <li>Restrict or object to processing</li>
+            <li>Data portability</li>
+            <li>Withdraw consent at any time</li>
+            <li>Lodge a complaint with a supervisory authority</li>
+          </ul>
+          <p>To exercise any of these rights, contact us at <a href="mailto:privacy@fentsi.com">privacy@fentsi.com</a>. We will respond within 30 days.</p>
+
+          <h2>8. Cookies</h2>
+          <p>We use essential cookies to operate the Service and optional analytics cookies (with your consent) to understand how the Service is used. You can manage your cookie preferences at any time through your browser settings or our cookie consent tool.</p>
+
+          <h2>9. Security</h2>
+          <p>We implement industry-standard security measures including TLS encryption in transit, AES-256 encryption at rest, regular security audits, and restricted access controls. However, no internet transmission is 100% secure, and we cannot guarantee absolute security.</p>
+
+          <h2>10. International transfers</h2>
+          <p>Your data is primarily stored within the European Economic Area (EEA). Where we transfer data outside the EEA, we ensure appropriate safeguards are in place, such as EU Standard Contractual Clauses.</p>
+
+          <h2>11. Changes to this policy</h2>
+          <p>We may update this Privacy Policy periodically. We will notify you of significant changes via email or a prominent notice on the platform. The "Last updated" date at the top of this page indicates when the policy was last revised.</p>
+
+          <h2>12. Contact us</h2>
+          <p>For any privacy-related questions or to exercise your rights: <a href="mailto:privacy@fentsi.com">privacy@fentsi.com</a></p>
+        </div>
+      </div>
+    </div>
+  </main><!-- /page-privacy -->
+
+  <!-- =========================================================
+       FOOTER (shared)
+  ========================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#" class="nav__logo" onclick="navigate('home')" style="color:#FFF">
+            fentsi<span class="nav__logo-dot"></span>
+          </a>
+          <p>The AI-powered platform for planning perfect weddings and events. From first idea to final detail.</p>
+        </div>
+        <div>
+          <div class="footer__col-title">Product</div>
+          <ul class="footer__links">
+            <li><a href="#" onclick="scrollToSection('how')">How it works</a></li>
+            <li><a href="#" onclick="scrollToSection('providers')">Vendors</a></li>
+            <li><a href="#" onclick="navigate('pricing')">Pricing</a></li>
+            <li><a href="#" onclick="navigate('pricing')">For Planners</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer__col-title">Company</div>
+          <ul class="footer__links">
+            <li><a href="#" onclick="navigate('contact')">About</a></li>
+            <li><a href="#" onclick="navigate('contact')">Contact</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer__col-title">Legal</div>
+          <ul class="footer__links">
+            <li><a href="#" onclick="navigate('terms')">Terms of Service</a></li>
+            <li><a href="#" onclick="navigate('privacy')">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__copy">© 2026 Fentsi S.r.l. All rights reserved.</div>
+        <div class="footer__legal">
+          <a href="#" onclick="navigate('terms')">Terms</a>
+          <a href="#" onclick="navigate('privacy')">Privacy</a>
+          <a href="mailto:hello@fentsi.com">hello@fentsi.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================= -->
+  <script>
+    // ---- Router ----
+    const pages = ['home', 'pricing', 'contact', 'terms', 'privacy'];
+
+    function navigate(page) {
+      pages.forEach(p => {
+        const el = document.getElementById('page-' + p);
+        if (el) el.classList.remove('active');
+      });
+      const target = document.getElementById('page-' + page);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Update nav active state
+      ['home','pricing','contact'].forEach(p => {
+        const link = document.getElementById('nav-' + p);
+        if (link) link.classList.toggle('active', p === page);
+      });
+
+      // Re-run reveal for new page content
+      setTimeout(triggerReveals, 100);
+      return false;
+    }
+
+    function scrollToSection(id) {
+      // Ensure we're on home page first
+      if (!document.getElementById('page-home').classList.contains('active')) {
+        navigate('home');
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 400);
+      } else {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return false;
+    }
+
+    // ---- Scroll nav ----
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ---- Scroll reveals ----
+    function triggerReveals() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+    }
+    triggerReveals();
+
+    // ---- Mobile nav ----
+    function toggleMobileNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+
+    // ---- FAQ accordion ----
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq__item');
+      const isOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq__item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq__question').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    // ---- Hero card interactions ----
+    function selectOpt(el) {
+      el.closest('.hero__card-options').querySelectorAll('.hero__card-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    // ---- Pricing toggle ----
+    function setPricingPeriod(period) {
+      const isAnnual = period === 'annual';
+      document.getElementById('toggle-monthly').classList.toggle('active', !isAnnual);
+      document.getElementById('toggle-annual').classList.toggle('active', isAnnual);
+
+      const proPrice = document.getElementById('pro-price');
+      const proPeriod = document.getElementById('pro-period');
+      const plannerPrice = document.getElementById('planner-price');
+      const plannerPeriod = document.getElementById('planner-period');
+
+      if (isAnnual) {
+        proPrice.textContent = '€10';
+        proPeriod.textContent = 'per month, billed annually';
+        plannerPrice.textContent = '€39';
+        plannerPeriod.textContent = 'per month, billed annually';
+      } else {
+        proPrice.textContent = '€12';
+        proPeriod.textContent = 'per month';
+        plannerPrice.textContent = '€49';
+        plannerPeriod.textContent = 'per month';
+      }
+    }
+
+    // ---- Contact form ----
+    function submitContactForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('cf-name').value.trim();
+      const email = document.getElementById('cf-email').value.trim();
+      const message = document.getElementById('cf-message').value.trim();
+
+      if (!name || !email || !message) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Simulate form submission
+      document.querySelector('#contactFormWrap form').style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    }
+
+    // ---- Hash routing ----
+    const hash = window.location.hash.replace('#', '');
+    if (pages.includes(hash)) navigate(hash);
+
+    // Update hash on navigate
+    const _navigate = navigate;
+    window.navigate = function(page) {
+      _navigate(page);
+      history.replaceState(null, '', '#' + page);
+    };
+  </script>
+
+</body>
+</html>

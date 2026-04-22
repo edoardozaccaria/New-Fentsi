@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fentsi — AI Event Planner
 
-## Getting Started
+> Trasforma il caos di Excel e WhatsApp in un piano evento perfetto in 10 minuti.
 
-First, run the development server:
+## Stack
+
+- **Frontend**: Next.js 14 (App Router) + TypeScript + Tailwind CSS + Framer Motion
+- **Backend**: Supabase (PostgreSQL + Auth + Storage)
+- **AI**: OpenAI GPT-4o-mini
+- **Payments**: Stripe (subscriptions)
+- **Deploy**: Vercel
+
+---
+
+## Setup locale
+
+### 1. Clona e installa
+
+```bash
+git clone https://github.com/TUO_USERNAME/fentsi.git
+cd fentsi
+npm install
+```
+
+### 2. Variabili d'ambiente
+
+```bash
+cp .env.example .env.local
+```
+
+Compila `.env.local` con:
+
+| Variable | Dove trovarla |
+|----------|---------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API |
+| `OPENAI_API_KEY` | platform.openai.com → API keys |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe → Dashboard → API keys |
+| `STRIPE_SECRET_KEY` | Stripe → Dashboard → API keys |
+| `STRIPE_WEBHOOK_SECRET` | Stripe CLI → `stripe listen` |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` in dev |
+
+### 3. Setup Supabase
+
+Vai su **Supabase → SQL Editor** ed esegui lo schema in `lib/supabase.ts` (copia i commenti SQL).
+
+### 4. Avvia in dev
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Apri [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy su Vercel
 
-## Learn More
+1. Pusha il repo su GitHub
+2. Vai su [vercel.com/new](https://vercel.com/new) → importa il repo
+3. Aggiungi tutte le variabili d'ambiente nel pannello Vercel
+4. Deploy! ✨
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Struttura del progetto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+├── page.tsx              → Landing page
+├── onboarding/page.tsx   → Flow 10-step
+├── dashboard/page.tsx    → Piano evento
+└── api/
+    ├── generate-plan/    → OpenAI + Supabase
+    └── checkout/         → Stripe
 
-## Deploy on Vercel
+components/onboarding/steps/
+├── StepEventType.tsx     → Tipo evento
+├── StepDate.tsx          → Data
+├── StepGuests.tsx        → Ospiti
+├── StepBudget.tsx        → Budget
+├── StepLocation.tsx      → Location
+├── StepStyle.tsx         → Stile/Mood
+├── StepPriorities.tsx    → Priorità
+├── StepServices.tsx      → Servizi
+├── StepRegion.tsx        → Regione
+└── StepContact.tsx       → Contatti + submit
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+lib/
+├── store.ts              → Zustand state
+├── openai.ts             → AI plan generation
+├── supabase.ts           → Database client + schema
+├── stripe.ts             → Payment plans
+└── utils.ts              → Helpers
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+types/event.ts            → TypeScript types
+```
+
+---
+
+## Roadmap
+
+- [ ] Auth (Supabase Auth + Google OAuth)
+- [ ] Dashboard multi-evento per wedding planner
+- [ ] PDF export (react-pdf)
+- [ ] Ricerca fornitori reali (Google Places API)
+- [ ] White-label per location e agenzie
+- [ ] App mobile (React Native / Expo)
+- [ ] Integrazione calendario (Google Calendar)
+- [ ] Chat con Fentsi (AI assistant in-app)
