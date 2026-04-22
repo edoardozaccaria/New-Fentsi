@@ -65,4 +65,11 @@ describe('buildDealLinks', () => {
     const result = buildDealLinks({ ...BASE_INPUT, style: 'bohemian' });
     result.decor!.forEach((l) => expect(l.url).toContain('bohemian'));
   });
+
+  it('derives checkIn as day before and checkOut as day after eventDate', () => {
+    const result = buildDealLinks({ ...BASE_INPUT, eventDate: '2026-09-15' });
+    const url = new URL(result.accommodation![1]!.url);
+    expect(url.searchParams.get('checkin')).toBe('2026-09-14');
+    expect(url.searchParams.get('checkout')).toBe('2026-09-16');
+  });
 });

@@ -11,20 +11,25 @@ function deriveCheckInOut(eventDate: string): {
   checkIn: string;
   checkOut: string;
 } {
-  const d = new Date(eventDate + 'T00:00:00');
-  const checkIn = new Date(d);
-  checkIn.setDate(d.getDate() - 1);
-  const checkOut = new Date(d);
-  checkOut.setDate(d.getDate() + 1);
+  const d = new Date(eventDate);
+  const ONE_DAY = 24 * 60 * 60 * 1000;
   return {
-    checkIn: checkIn.toISOString().split('T')[0]!,
-    checkOut: checkOut.toISOString().split('T')[0]!,
+    checkIn: new Date(d.getTime() - ONE_DAY).toISOString().split('T')[0]!,
+    checkOut: new Date(d.getTime() + ONE_DAY).toISOString().split('T')[0]!,
   };
 }
 
 export function buildDealLinks(input: DealLinksInput): Partial<DealLinks> {
   const bookingId = process.env.BOOKING_AFFILIATE_ID ?? '';
   const amazonTag = process.env.AMAZON_ASSOCIATES_TAG ?? '';
+  if (!bookingId)
+    console.warn(
+      '[deals] BOOKING_AFFILIATE_ID not set — Booking links untracked'
+    );
+  if (!amazonTag)
+    console.warn(
+      '[deals] AMAZON_ASSOCIATES_TAG not set — Amazon links untracked'
+    );
   const categories = getRelevantCategories(input.eventType);
   const result: Partial<DealLinks> = {};
 
@@ -74,6 +79,9 @@ export function buildDealLinks(input: DealLinksInput): Partial<DealLinks> {
           budget: input.budget,
           associatesTag: amazonTag,
         });
+        break;
+      default:
+        console.warn(`[deals] Unknown category skipped: ${String(category)}`);
         break;
     }
   }
