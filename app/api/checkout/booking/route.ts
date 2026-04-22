@@ -17,7 +17,7 @@ const RATE_LIMIT = { limit: 10, windowSeconds: 600 }
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers)
-  const rl = rateLimit(`checkout-booking:${ip}`, RATE_LIMIT)
+  const rl = await rateLimit(`checkout-booking:${ip}`, RATE_LIMIT)
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },

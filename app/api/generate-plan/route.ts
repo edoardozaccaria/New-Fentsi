@@ -86,7 +86,7 @@ async function fetchRealVendors(
 export async function POST(req: NextRequest) {
   // ── Rate limiting ────────────────────────────────────────────────────────
   const ip = getClientIp(req.headers)
-  const rl = rateLimit(`generate-plan:${ip}`, RATE_LIMIT)
+  const rl = await rateLimit(`generate-plan:${ip}`, RATE_LIMIT)
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },

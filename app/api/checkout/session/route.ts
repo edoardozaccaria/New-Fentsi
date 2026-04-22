@@ -81,7 +81,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 
-  const { error: bookingError } = await supabase.from("bookings").insert({
+  // TODO: add Relationships to types/supabase.ts to remove this cast
+  // (supabase-js v2.44 type inference regression on tables without FK Relationships)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any;
+  const { error: bookingError } = await db.from("bookings").insert({
     plan_id: planId,
     vendor_id: vendorId,
     amount_eur: amount,

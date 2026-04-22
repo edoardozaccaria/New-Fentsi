@@ -30,12 +30,19 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
     redirect("/login");
   }
 
-  const { data: planData, error: planError } = await supabase
+  type PlanRow = Pick<
+    import("@/types/supabase").Database["public"]["Tables"]["plans"]["Row"],
+    "id" | "created_at" | "total_budget_eur"
+  >;
+
+  const { data: _planData, error: planError } = await supabase
     .from("plans")
-    .select("id, created_at, total_budget_eur, event_type:event_type_id(name)")
+    .select("id, created_at, total_budget_eur")
     .eq("id", planId)
     .eq("user_id", user.id)
     .maybeSingle();
+
+  const planData = _planData as PlanRow | null;
 
   if (planError) {
     // eslint-disable-next-line no-console
@@ -46,11 +53,18 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
     notFound();
   }
 
-  const { data: vendorData, error: vendorError } = await supabase
+  type VendorRow = Pick<
+    import("@/types/supabase").Database["public"]["Tables"]["vendors"]["Row"],
+    "id" | "name" | "type" | "city" | "country" | "price_band" | "direct_partner" | "aggregator"
+  >;
+
+  const { data: _vendorData, error: vendorError } = await supabase
     .from("vendors")
     .select("id, name, type, city, country, price_band, direct_partner, aggregator")
     .eq("id", vendorId)
     .maybeSingle();
+
+  const vendorData = _vendorData as VendorRow | null;
 
   if (vendorError) {
     // eslint-disable-next-line no-console

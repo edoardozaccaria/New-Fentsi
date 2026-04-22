@@ -463,7 +463,7 @@ export interface Database {
           booking_date: string | null;
           amount_eur: number | null;
           stripe_session_id: string | null;
-          status: "initiated" | "paid" | "refunded" | null;
+          status: "initiated" | "paid" | "completed" | "failed" | "refunded" | null;
           created_at: string | null;
         };
         Insert: {

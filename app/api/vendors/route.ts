@@ -307,7 +307,7 @@ Return ONLY the JSON array — no markdown, no explanation.`
 // ── Route handler ─────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers)
-  const rl = rateLimit(`vendors:${ip}`, RATE_LIMIT)
+  const rl = await rateLimit(`vendors:${ip}`, RATE_LIMIT)
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },
