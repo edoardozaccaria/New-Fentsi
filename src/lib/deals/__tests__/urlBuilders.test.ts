@@ -43,6 +43,20 @@ describe('buildBookingAccommodationLinks', () => {
     });
     links.forEach((l) => expect(l.url).not.toContain('aid='));
   });
+
+  it('sets price filter without double-encoding', () => {
+    const links = buildBookingAccommodationLinks({
+      location: 'Dallas',
+      guestCount: 20,
+      checkIn: '2026-06-01',
+      checkOut: '2026-06-02',
+      budget: 10000,
+      affiliateId: '',
+    });
+    const valueUrl = new URL(links[0]!.url);
+    const nflt = valueUrl.searchParams.get('nflt');
+    expect(nflt).toMatch(/^price=/);
+  });
 });
 
 describe('buildBookingVenueLinks', () => {

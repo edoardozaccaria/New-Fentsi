@@ -31,13 +31,13 @@ export function buildBookingAccommodationLinks(
   const valueUrl = new URL(base.toString());
   valueUrl.searchParams.set(
     'nflt',
-    `price%3D0-${Math.round(nightlyTarget * 0.7)}`
+    `price=0-${Math.round(nightlyTarget * 0.7)}`
   );
 
   const premiumUrl = new URL(base.toString());
   premiumUrl.searchParams.set(
     'nflt',
-    `price%3D${Math.round(nightlyTarget * 1.3)}-9999`
+    `price=${Math.round(nightlyTarget * 1.3)}-9999`
   );
 
   return [
