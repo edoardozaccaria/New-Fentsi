@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { InquiryDialog } from '@/components/event-plan/InquiryDialog';
 import { BudgetPieChart } from '@/components/event-plan/BudgetPieChart';
 import { FloatingActionBar } from '@/components/event-plan/FloatingActionBar';
+import { DealsCard } from '@/components/event-plan/DealsCard';
+import { buildDealLinks } from '@/lib/deals';
 import type {
   PlanOverview,
   AlertItem,
@@ -33,6 +35,7 @@ interface EventRow {
   city: string;
   budget_usd: number;
   required_services: string[];
+  style_preferences: string[];
   output_language: string | null;
   plan_data: PlanOverview | null;
 }
@@ -398,6 +401,15 @@ export default async function EventPlanPage({
   const typedSuppliers = (suppliers ?? []) as SupplierRow[];
   const plan = ev.plan_data;
 
+  const dealLinks = buildDealLinks({
+    location: ev.city,
+    eventType: ev.event_type,
+    guestCount: ev.guest_count,
+    eventDate: ev.event_date,
+    style: ev.style_preferences?.[0] ?? 'classic',
+    budget: ev.budget_usd,
+  });
+
   // Separate venue suppliers from others
   const venueSuppliers = typedSuppliers.filter(
     (s) => s.category === 'venue' || s.category === 'venues'
@@ -505,6 +517,9 @@ export default async function EventPlanPage({
                 <VenueCard key={s.id} supplier={s} eventId={ev.id} />
               ))}
             </div>
+            {dealLinks.venues && (
+              <DealsCard title="Browse More Venues" deals={dealLinks.venues} />
+            )}
           </section>
         )}
 
@@ -636,6 +651,9 @@ export default async function EventPlanPage({
                 </p>
               </div>
             </div>
+            {dealLinks.catering && (
+              <DealsCard title="Find Caterers" deals={dealLinks.catering} />
+            )}
           </section>
         )}
 
@@ -716,6 +734,12 @@ export default async function EventPlanPage({
                   </div>
                 )}
               </div>
+              {dealLinks.accommodation && (
+                <DealsCard
+                  title="Book Accommodation"
+                  deals={dealLinks.accommodation}
+                />
+              )}
             </section>
           )}
 
@@ -749,8 +773,30 @@ export default async function EventPlanPage({
                 />
               ))}
             </div>
+            {(category === 'flowers' ||
+              category === 'florist' ||
+              category === 'florists') &&
+              dealLinks.florists && (
+                <DealsCard title="Browse Florists" deals={dealLinks.florists} />
+              )}
+            {(category === 'planner' ||
+              category === 'event_planner' ||
+              category === 'planners') &&
+              dealLinks.eventPlanners && (
+                <DealsCard
+                  title="Browse Event Planners"
+                  deals={dealLinks.eventPlanners}
+                />
+              )}
           </section>
         ))}
+
+        {dealLinks.decor && (
+          <section className="space-y-4">
+            <SectionHeading>Decor & Supplies</SectionHeading>
+            <DealsCard title="Shop Decor on Amazon" deals={dealLinks.decor} />
+          </section>
+        )}
       </main>
 
       {/* ── FloatingActionBar ─────────────────────────────── */}
