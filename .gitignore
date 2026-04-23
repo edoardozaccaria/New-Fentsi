@@ -51,3 +51,11 @@ supabase/.temp/
 
 # Claude Code
 .claude/
+.worktrees/
+
+# Local scripts & docs non destinati al repo
+install.sh
+mcp-config.json
+*.docx
+.env copy.*
+.env\ copy.*
