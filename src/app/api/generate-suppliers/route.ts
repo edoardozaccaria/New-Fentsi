@@ -72,6 +72,31 @@ export async function POST(request: Request) {
     );
   }
 
+  // --- Paywall check: free users limited to 1 plan ---
+  const supabaseService = createSupabaseServiceClient();
+
+  const { data: profile } = await supabaseService
+    .from('profiles')
+    .select('subscription_tier')
+    .eq('id', user.id)
+    .single();
+
+  const tier = profile?.subscription_tier ?? 'free';
+
+  if (tier === 'free') {
+    const { count } = await supabaseService
+      .from('events')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id);
+
+    if ((count ?? 0) >= 1) {
+      return Response.json(
+        { error: 'plan_limit_reached' },
+        { status: 402 }
+      );
+    }
+  }
+
   // --- Anthropic streaming ---
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 
