@@ -1,14 +1,8 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { getUserPlanStatus } from '@/lib/plans';
 
-/**
- * Dashboard — authenticated landing page.
- *
- * `proxy.ts` redirects all signed-out users away from `/dashboard` before
- * this component runs, but we still re-check on the server to keep the page
- * safe if the proxy matcher changes.
- */
 export default async function DashboardPage() {
   const supabase = await createSupabaseServerClient();
   const {
@@ -16,6 +10,8 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) redirect('/login?next=/dashboard');
+
+  const planStatus = await getUserPlanStatus(user.id);
 
   return (
     <main className="min-h-screen bg-[#0b0a09] text-[#f5ecdc] px-6 py-16">
@@ -32,28 +28,58 @@ export default async function DashboardPage() {
           tuoi eventi.
         </p>
 
+        {/* Plan status badge */}
+        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-[#f5ecdc]/10 px-4 py-1.5">
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{ background: planStatus.tier === 'free' ? '#6b6258' : '#c9975b' }}
+          />
+          <span className="text-xs text-[#c9bca6]">
+            {planStatus.tier === 'free'
+              ? `Piano gratuito — ${planStatus.eventsCount}/1 piano usati`
+              : `Piano ${planStatus.tier} — ${planStatus.eventsCount} piani creati`}
+          </span>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2">
-          <Link
-            href="/create-event/wizard"
-            className="group rounded-2xl border border-[#f5ecdc]/10 bg-[#11100e] p-6 hover:border-[#e8816b]/40 transition"
-          >
-            <h2 className="font-[family-name:var(--font-display)] text-2xl mb-1">
-              Nuovo evento
-            </h2>
-            <p className="text-sm text-[#c9bca6]">
-              Avvia il wizard e ottieni un piano generato su misura.
-            </p>
-          </Link>
+          {planStatus.canCreateEvent ? (
+            <Link
+              href="/create-event/wizard"
+              className="group rounded-2xl border border-[#f5ecdc]/10 bg-[#11100e] p-6 hover:border-[#e8816b]/40 transition"
+            >
+              <h2 className="font-[family-name:var(--font-display)] text-2xl mb-1">
+                Nuovo evento
+              </h2>
+              <p className="text-sm text-[#c9bca6]">
+                Avvia il wizard e ottieni un piano generato su misura.
+              </p>
+            </Link>
+          ) : (
+            <Link
+              href="/checkout"
+              className="group rounded-2xl border border-[#e8816b]/30 bg-[#11100e] p-6 hover:border-[#e8816b]/60 transition"
+            >
+              <h2 className="font-[family-name:var(--font-display)] text-2xl mb-1 flex items-center gap-2">
+                Nuovo evento
+                <span className="text-sm font-normal text-[#e8816b]">🔒 Pro</span>
+              </h2>
+              <p className="text-sm text-[#c9bca6]">
+                Hai usato il tuo piano gratuito. Passa a Pro per continuare.
+              </p>
+            </Link>
+          )}
 
           <Link
             href="/checkout"
             className="group rounded-2xl border border-[#f5ecdc]/10 bg-[#11100e] p-6 hover:border-[#e8816b]/40 transition"
           >
             <h2 className="font-[family-name:var(--font-display)] text-2xl mb-1">
-              Upgrade
+              {planStatus.tier === 'free' ? 'Upgrade a Pro' : 'Gestisci piano'}
             </h2>
             <p className="text-sm text-[#c9bca6]">
-              Sblocca più eventi, fornitori premium e coordinamento.
+              {planStatus.tier === 'free'
+                ? 'Sblocca più eventi, fornitori premium e coordinamento.'
+                : 'Visualizza e gestisci la tua sottoscrizione.'}
             </p>
           </Link>
         </div>
