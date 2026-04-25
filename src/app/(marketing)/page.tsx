@@ -58,7 +58,7 @@ function Nav() {
           Accedi
         </Link>
         <Link
-          href="/create"
+          href="/create-event/wizard"
           className="text-sm font-semibold px-4 py-2 rounded-[8px] transition-opacity hover:opacity-80"
           style={{ background: '#c9975b', color: '#0b0a09' }}
         >
@@ -114,7 +114,7 @@ function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Link
-            href="/create"
+            href="/create-event/wizard"
             className="inline-flex items-center gap-2 text-base font-semibold px-8 py-4 rounded-[8px] transition-opacity hover:opacity-85"
             style={{ background: '#c9975b', color: '#0b0a09' }}
           >
@@ -516,7 +516,7 @@ function Pricing() {
                 ))}
               </ul>
               <Link
-                href="/create"
+                href="/create-event/wizard"
                 className="block text-center text-sm font-medium py-3 rounded-[8px] transition-colors hover:border-[#3d342b]"
                 style={{ border: '1px solid #2a2520', color: '#f0ebe3' }}
               >
@@ -576,7 +576,7 @@ function Pricing() {
                 ))}
               </ul>
               <Link
-                href="/create"
+                href="/create-event/wizard"
                 className="block text-center text-sm font-semibold py-3 rounded-[8px] transition-opacity hover:opacity-85"
                 style={{ background: '#c9975b', color: '#0b0a09' }}
               >
@@ -626,7 +626,7 @@ function FinalCTA() {
         </motion.p>
         <motion.div variants={fadeUp}>
           <Link
-            href="/create"
+            href="/create-event/wizard"
             className="inline-flex items-center gap-2 text-base font-semibold px-10 py-4 rounded-[8px] transition-opacity hover:opacity-85"
             style={{ background: '#c9975b', color: '#0b0a09' }}
           >
