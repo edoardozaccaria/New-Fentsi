@@ -25,6 +25,13 @@ export async function getUserPlanStatus(userId: string): Promise<UserPlanStatus>
     db.from('events').select('id', { count: 'exact', head: true }).eq('user_id', userId),
   ]);
 
+  if (profileResult.error) {
+    throw new Error(`Failed to fetch profile: ${profileResult.error.message}`);
+  }
+  if (countResult.error) {
+    throw new Error(`Failed to fetch events count: ${countResult.error.message}`);
+  }
+
   const tier = profileResult.data?.subscription_tier ?? 'free';
   const eventsCount = countResult.count ?? 0;
   const limit = TIER_LIMITS[tier] ?? 1;

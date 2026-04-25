@@ -8,12 +8,9 @@ import { createSupabaseServiceClient } from '@/lib/supabase/service';
 import { getUserPlanStatus } from './plans';
 
 function makeDb(tier: string, count: number) {
-  let fromCallCount = 0;
   return {
-    from: vi.fn((_table: string) => {
-      fromCallCount++;
-      if (fromCallCount === 1) {
-        // profiles query
+    from: vi.fn((table: string) => {
+      if (table === 'profiles') {
         return {
           select: vi.fn(() => ({
             eq: vi.fn(() => ({
@@ -25,10 +22,58 @@ function makeDb(tier: string, count: number) {
           })),
         };
       }
-      // events count query
+      // events table
       return {
         select: vi.fn(() => ({
           eq: vi.fn(async () => ({ count, error: null })),
+        })),
+      };
+    }),
+  };
+}
+
+function makeDbWithProfileError(errorMsg: string) {
+  return {
+    from: vi.fn((table: string) => {
+      if (table === 'profiles') {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              single: vi.fn(async () => ({
+                data: null,
+                error: { message: errorMsg },
+              })),
+            })),
+          })),
+        };
+      }
+      return {
+        select: vi.fn(() => ({
+          eq: vi.fn(async () => ({ count: 0, error: null })),
+        })),
+      };
+    }),
+  };
+}
+
+function makeDbWithCountError(errorMsg: string) {
+  return {
+    from: vi.fn((table: string) => {
+      if (table === 'profiles') {
+        return {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              single: vi.fn(async () => ({
+                data: { subscription_tier: 'free' },
+                error: null,
+              })),
+            })),
+          })),
+        };
+      }
+      return {
+        select: vi.fn(() => ({
+          eq: vi.fn(async () => ({ count: null, error: { message: errorMsg } })),
         })),
       };
     }),
@@ -66,5 +111,19 @@ describe('getUserPlanStatus', () => {
     );
     const status = await getUserPlanStatus('user-1');
     expect(status).toEqual({ tier: 'single', eventsCount: 1, canCreateEvent: false });
+  });
+
+  it('throws when profile query fails', async () => {
+    vi.mocked(createSupabaseServiceClient).mockReturnValue(
+      makeDbWithProfileError('connection timeout') as unknown as ReturnType<typeof createSupabaseServiceClient>
+    );
+    await expect(getUserPlanStatus('user-1')).rejects.toThrow('Failed to fetch profile');
+  });
+
+  it('throws when events count query fails', async () => {
+    vi.mocked(createSupabaseServiceClient).mockReturnValue(
+      makeDbWithCountError('query failed') as unknown as ReturnType<typeof createSupabaseServiceClient>
+    );
+    await expect(getUserPlanStatus('user-1')).rejects.toThrow('Failed to fetch events count');
   });
 });
