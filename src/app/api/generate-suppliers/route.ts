@@ -75,19 +75,29 @@ export async function POST(request: Request) {
   // --- Paywall check: free users limited to 1 plan ---
   const supabaseService = createSupabaseServiceClient();
 
-  const { data: profile } = await supabaseService
+  const { data: profile, error: profileError } = await supabaseService
     .from('profiles')
     .select('subscription_tier')
     .eq('id', user.id)
     .single();
 
+  // PGRST116 = "no rows" (new user with no profile yet — treat as free).
+  // Any other error means DB is unavailable — fail closed to protect paid users.
+  if (profileError && profileError.code !== 'PGRST116') {
+    return Response.json({ error: 'Service unavailable' }, { status: 503 });
+  }
+
   const tier = profile?.subscription_tier ?? 'free';
 
   if (tier === 'free') {
-    const { count } = await supabaseService
+    const { count, error: countError } = await supabaseService
       .from('events')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', user.id);
+
+    if (countError) {
+      return Response.json({ error: 'Service unavailable' }, { status: 503 });
+    }
 
     if ((count ?? 0) >= 1) {
       return Response.json(
