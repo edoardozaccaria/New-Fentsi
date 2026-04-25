@@ -171,29 +171,7 @@ export function Step10_Review() {
     return () => stopMessageRotation();
   }, [stopMessageRotation]);
 
-  useEffect(() => {
-    const resumed = sessionStorage.getItem('fentsi-wizard-resume-generate');
-    if (resumed === '1') {
-      sessionStorage.removeItem('fentsi-wizard-resume-generate');
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        handleGenerate(session?.access_token ?? undefined);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  async function handleGenerateCTA() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (!session) {
-      setAuthOpen(true);
-      return;
-    }
-    handleGenerate(session.access_token);
-  }
-
-  async function handleGenerate(accessToken?: string) {
+  const handleGenerate = useCallback(async (accessToken?: string) => {
     setGenerating(true);
     setSuppliers([]);
     setStreamDone(false);
@@ -299,6 +277,27 @@ export function Step10_Review() {
       stopMessageRotation();
       setGenerating(false);
     }
+  }, [store, router, startMessageRotation, stopMessageRotation]);
+
+  useEffect(() => {
+    const resumed = sessionStorage.getItem('fentsi-wizard-resume-generate');
+    if (resumed === '1') {
+      sessionStorage.removeItem('fentsi-wizard-resume-generate');
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        handleGenerate(session?.access_token ?? undefined);
+      });
+    }
+  }, [handleGenerate]);
+
+  async function handleGenerateCTA() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      setAuthOpen(true);
+      return;
+    }
+    handleGenerate(session.access_token);
   }
 
   async function handleSendMagicLink() {
@@ -446,7 +445,7 @@ export function Step10_Review() {
               <SummaryRow
                 label="Servizi"
                 value={
-                  requiredServices.map((s) => s.replace('_', ' ')).join(', ') ||
+                  requiredServices.map((s) => s.replaceAll('_', ' ')).join(', ') ||
                   '—'
                 }
               />
@@ -454,7 +453,7 @@ export function Step10_Review() {
                 <SummaryRow
                   label="Esigenze"
                   value={specialRequirements
-                    .map((r) => r.replace('_', ' '))
+                    .map((r) => r.replaceAll('_', ' '))
                     .join(', ')}
                 />
               )}
@@ -503,8 +502,8 @@ export function Step10_Review() {
                 {streamDone ? 'Fornitori trovati' : 'Ricerca fornitori…'}
               </p>
               <div className="space-y-3">
-                {suppliers.map((s, i) => (
-                  <SupplierCard key={i} supplier={s} />
+                {suppliers.map((s) => (
+                  <SupplierCard key={`${s.category}-${s.name}`} supplier={s} />
                 ))}
                 {Array.from({ length: skeletonCount }).map((_, i) => (
                   <SupplierSkeleton key={`sk-${i}`} />
