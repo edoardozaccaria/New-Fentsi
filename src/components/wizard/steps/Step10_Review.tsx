@@ -7,6 +7,7 @@ import { useEventWizardStore } from '@/store/useEventWizardStore';
 import { WizardShell } from '../WizardShell';
 import { supabase } from '@/lib/supabase';
 import type { VendorSuggestion } from '@/types/plan.types';
+import { PaywallModal } from '../PaywallModal';
 
 function formatEur(n: number) {
   return new Intl.NumberFormat('it-IT', {
@@ -145,6 +146,7 @@ export function Step10_Review() {
   const [suppliers, setSuppliers] = useState<VendorSuggestion[]>([]);
   const [streamDone, setStreamDone] = useState(false);
   const [generateError, setGenerateError] = useState('');
+  const [paywallOpen, setPaywallOpen] = useState(false);
   const [skeletonCount, setSkeletonCount] = useState(0);
   const [loadingMessageIdx, setLoadingMessageIdx] = useState(0);
 
@@ -232,6 +234,12 @@ export function Step10_Review() {
       });
 
       if (!res.ok) {
+        if (res.status === 402) {
+          setGenerating(false);
+          stopMessageRotation();
+          setPaywallOpen(true);
+          return;
+        }
         const err = await res.json().catch(() => ({ error: 'Unknown error' }));
         setGenerateError(err.error ?? 'Generazione fallita.');
         setGenerating(false);
@@ -611,6 +619,8 @@ export function Step10_Review() {
           </Dialog.Portal>
         </Dialog.Root>
       </WizardShell>
+
+      <PaywallModal open={paywallOpen} onClose={() => setPaywallOpen(false)} />
     </>
   );
 }
