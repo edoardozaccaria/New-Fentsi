@@ -211,34 +211,40 @@ export async function POST(request: Request) {
         // --- Save to Supabase (service role bypasses RLS for admin inserts) ---
         const supabaseAdmin = createSupabaseServiceClient();
 
+        // The real events table (001_initial_schema) stores wizard fields
+        // inside a JSONB `data` column. The typed columns added by 002_plan_data
+        // are: output_language, special_requirements, duration, plan_data.
         const { data: eventRow, error: eventError } = await supabaseAdmin
           .from('events')
           .insert({
             user_id: user.id,
-            event_type: data.eventType,
-            event_date: data.eventDate,
-            guest_count: data.guestCount,
-            city: data.city,
-            venue_preference: data.venuePreference,
-            budget_usd: data.budgetUsd,
-            style_preferences: data.stylePreferences,
-            required_services: data.requiredServices,
-            special_requests: data.specialRequests ?? null,
-            // wizard v2 fields (require migration 002)
+            data: {
+              eventType: data.eventType,
+              eventDate: data.eventDate,
+              guestCount: data.guestCount,
+              city: data.city,
+              venuePreference: data.venuePreference,
+              budgetUsd: data.budgetUsd,
+              stylePreferences: data.stylePreferences,
+              requiredServices: data.requiredServices,
+              specialRequests: data.specialRequests ?? null,
+            },
             output_language: data.outputLanguage,
-            special_requirements: data.specialRequirements,
+            special_requirements: data.specialRequirements ?? [],
             duration: data.duration,
             plan_data: planOverview ?? null,
+            status: 'planning',
           })
           .select('id')
           .single();
 
         if (eventError || !eventRow) {
+          console.error('[generate-suppliers] events insert error:', eventError);
           controller.enqueue(
             encoder.encode(
               JSON.stringify({
                 type: 'error',
-                error: 'Failed to save event.',
+                error: `Failed to save event: ${eventError?.message ?? 'unknown'} (code: ${eventError?.code ?? '?'})`,
               }) + '\n'
             )
           );

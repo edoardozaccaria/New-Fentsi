@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEventWizardStore } from '@/store/useEventWizardStore';
 import { WizardShell } from '../WizardShell';
 import { supabase } from '@/lib/supabase';
+import type { EventWizardState } from '@/store/useEventWizardStore';
 import type { VendorSuggestion } from '@/types/plan.types';
 import { PaywallModal } from '../PaywallModal';
 
@@ -141,6 +142,7 @@ export function Step10_Review() {
   const [authSent, setAuthSent] = useState(false);
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const [generating, setGenerating] = useState(false);
   const [suppliers, setSuppliers] = useState<VendorSuggestion[]>([]);
@@ -256,6 +258,11 @@ export function Step10_Review() {
               });
             } else if (parsed.type === 'done') {
               eventId = parsed.eventId;
+            } else if (parsed.type === 'error') {
+              setGenerateError(parsed.error ?? 'Errore durante la generazione.');
+              setGenerating(false);
+              stopMessageRotation();
+              return;
             }
           } catch {
             // partial chunk
@@ -264,10 +271,15 @@ export function Step10_Review() {
       }
 
       setStreamDone(true);
-      store.reset();
 
       if (eventId) {
+        localStorage.removeItem('fentsi-wizard-resume-generate');
+        localStorage.removeItem('fentsi-wizard-draft');
+        store.reset();
         router.push(`/event-plan/${eventId}`);
+      } else {
+        setGenerateError('Piano generato ma ID non ricevuto. Riprova.');
+        setGenerating(false);
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name !== 'AbortError') {
@@ -280,14 +292,22 @@ export function Step10_Review() {
   }, [store, router, startMessageRotation, stopMessageRotation]);
 
   useEffect(() => {
-    const resumed = sessionStorage.getItem('fentsi-wizard-resume-generate');
+    const resumed = localStorage.getItem('fentsi-wizard-resume-generate');
     if (resumed === '1') {
-      sessionStorage.removeItem('fentsi-wizard-resume-generate');
+      localStorage.removeItem('fentsi-wizard-resume-generate');
       supabase.auth.getSession().then(({ data: { session } }) => {
         handleGenerate(session?.access_token ?? undefined);
       });
     }
   }, [handleGenerate]);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const interval = window.setInterval(() => {
+      setResendCooldown((value) => Math.max(0, value - 1));
+    }, 1000);
+    return () => window.clearInterval(interval);
+  }, [resendCooldown]);
 
   async function handleGenerateCTA() {
     const {
@@ -307,7 +327,27 @@ export function Step10_Review() {
     }
     setAuthLoading(true);
     setAuthError('');
-    sessionStorage.setItem('fentsi-wizard-resume-generate', '1');
+
+    const draft: EventWizardState = {
+      eventType: store.eventType,
+      eventDate: store.eventDate,
+      guestCount: store.guestCount,
+      city: store.city,
+      venuePreference: store.venuePreference,
+      budgetUsd: store.budgetUsd,
+      stylePreferences: store.stylePreferences,
+      requiredServices: store.requiredServices,
+      duration: store.duration,
+      specialRequirements: store.specialRequirements,
+      specialRequests: store.specialRequests,
+      outputLanguage: store.outputLanguage,
+      currentStep: store.currentStep,
+      lastStepCompleted: store.lastStepCompleted,
+    };
+
+    localStorage.setItem('fentsi-wizard-resume-generate', '1');
+    localStorage.setItem('fentsi-wizard-draft', JSON.stringify(draft));
+
     const { error } = await supabase.auth.signInWithOtp({
       email: authEmail,
       options: {
@@ -315,9 +355,19 @@ export function Step10_Review() {
       },
     });
     setAuthLoading(false);
+    setResendCooldown(30);
+
     if (error) {
-      setAuthError(error.message);
-      sessionStorage.removeItem('fentsi-wizard-resume-generate');
+      const message = error.message.toLowerCase();
+      if (message.includes('rate limit')) {
+        setAuthError(
+          'Hai inviato troppi link di accesso. Attendi qualche minuto e riprova.'
+        );
+      } else {
+        setAuthError(error.message);
+      }
+      localStorage.removeItem('fentsi-wizard-resume-generate');
+      localStorage.removeItem('fentsi-wizard-draft');
     } else {
       setAuthSent(true);
     }
@@ -595,15 +645,19 @@ export function Step10_Review() {
                   )}
                   <button
                     onClick={handleSendMagicLink}
-                    disabled={authLoading}
+                    disabled={authLoading || resendCooldown > 0}
                     className="w-full py-3 rounded-xl font-medium text-sm transition-opacity"
                     style={{
                       background: '#c9975b',
                       color: '#0b0a09',
-                      opacity: authLoading ? 0.6 : 1,
+                      opacity: authLoading || resendCooldown > 0 ? 0.6 : 1,
                     }}
                   >
-                    {authLoading ? 'Invio in corso…' : 'Invia link magico'}
+                    {authLoading
+                      ? 'Invio in corso…'
+                      : resendCooldown > 0
+                      ? `Riprova tra ${resendCooldown}s`
+                      : 'Invia link magico'}
                   </button>
                 </div>
               )}
